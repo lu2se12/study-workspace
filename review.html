@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>七年级小四门复习工作台</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --teal-50:#f0fdfa;--teal-100:#ccfbf1;--teal-200:#99f6e4;
+  --teal-500:#14b8a6;--teal-600:#0d9488;--teal-700:#0f766e;--teal-800:#115e59;
+  --blue-50:#eff6ff;--blue-500:#3b82f6;--blue-600:#2563eb;
+  --green-500:#22c55e;--green-600:#16a34a;
+  --red-500:#ef4444;--red-50:#fef2f2;
+  --amber-500:#f59e0b;--amber-50:#fffbeb;
+  --purple-500:#8b5cf6;--purple-50:#f5f3ff;
+  --gray-50:#f9fafb;--gray-100:#f3f4f6;--gray-200:#e5e7eb;--gray-300:#d1d5db;
+  --gray-400:#9ca3af;--gray-500:#6b7280;--gray-600:#4b5563;--gray-700:#374151;--gray-900:#111827;
+  --white:#fff;--radius:14px;--radius-sm:8px;
+  --shadow:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.04);
+  --shadow-lg:0 4px 12px rgba(0,0,0,.08),0 2px 4px rgba(0,0,0,.04);
+}
+html{-webkit-text-size-adjust:100%}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",sans-serif;background:var(--teal-50);color:var(--gray-900);line-height:1.6;font-size:15px}
+.app{display:flex;min-height:100vh}
+
+/* ===== Sidebar ===== */
+.sidebar{width:220px;background:var(--teal-700);color:#fff;display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:100;padding-bottom:env(safe-area-inset-bottom)}
+.sidebar-logo{padding:20px 18px 14px;font-size:17px;font-weight:700;display:flex;align-items:center;gap:8px;border-bottom:1px solid rgba(255,255,255,.1)}
+.sidebar-logo .dot{width:10px;height:10px;border-radius:50%;background:var(--teal-200);flex-shrink:0}
+.nav-items{flex:1;padding:12px 10px;display:flex;flex-direction:column;gap:4px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:13px 14px;border-radius:10px;border:none;background:transparent;color:rgba(255,255,255,.7);font-size:15px;font-weight:500;cursor:pointer;transition:all .15s;text-align:left;width:100%;font-family:inherit}
+.nav-item:hover{background:rgba(255,255,255,.08);color:#fff}
+.nav-item.active{background:rgba(255,255,255,.15);color:#fff;font-weight:600}
+.nav-item svg{flex-shrink:0}
+.nav-bottom{padding:12px 10px;border-top:1px solid rgba(255,255,255,.1);display:flex;flex-direction:column;gap:4px}
+.nav-bottom .nav-item{font-size:13px;padding:10px 14px}
+
+/* ===== Top bar (mobile) ===== */
+.topbar{display:none;position:fixed;top:0;left:0;right:0;height:52px;background:var(--teal-700);color:#fff;z-index:100;align-items:center;justify-content:space-between;padding:0 14px;padding-top:env(safe-area-inset-top)}
+.topbar-title{font-size:16px;font-weight:700}
+.topbar-right{display:flex;align-items:center;gap:8px}
+
+/* ===== Main ===== */
+.main{flex:1;margin-left:220px;padding:24px;max-width:960px}
+.page-header{margin-bottom:20px}
+.page-header h1{font-size:22px;font-weight:700;color:var(--gray-900)}
+.page-header p{color:var(--gray-500);font-size:14px;margin-top:2px}
+
+/* ===== Cards ===== */
+.card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;margin-bottom:14px}
+.card-title{font-size:16px;font-weight:600;margin-bottom:12px;color:var(--gray-700);display:flex;align-items:center;gap:6px}
+
+/* ===== Stat cards (home) ===== */
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:18px}
+.stat-card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;text-align:center;position:relative;overflow:hidden}
+.stat-card .stat-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin:0 auto 8px}
+.stat-card .stat-value{font-size:28px;font-weight:800;line-height:1.2}
+.stat-card .stat-label{font-size:13px;color:var(--gray-500);margin-top:2px}
+.stat-card.teal .stat-icon{background:var(--teal-100);color:var(--teal-600)}
+.stat-card.teal .stat-value{color:var(--teal-600)}
+.stat-card.blue .stat-icon{background:var(--blue-50);color:var(--blue-500)}
+.stat-card.blue .stat-value{color:var(--blue-500)}
+.stat-card.amber .stat-icon{background:var(--amber-50);color:var(--amber-500)}
+.stat-card.amber .stat-value{color:var(--amber-500)}
+
+/* ===== Progress bar ===== */
+.progress-bar{height:10px;background:var(--gray-100);border-radius:5px;overflow:hidden}
+.progress-fill{height:100%;border-radius:5px;transition:width .4s ease;background:var(--teal-500)}
+.progress-text{font-size:13px;color:var(--gray-500);margin-top:6px}
+
+/* ===== Today section ===== */
+.today-section{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;margin-bottom:18px;border-left:4px solid var(--teal-500)}
+.today-section h2{font-size:17px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.today-item{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:10px;margin-bottom:8px;font-size:15px}
+.today-item.overdue{background:var(--red-50);border:1px solid #fecaca}
+.today-item.pending{background:var(--amber-50);border:1px solid #fde68a}
+.today-item .subject-tag{font-size:12px;padding:2px 8px;border-radius:6px;font-weight:600;flex-shrink:0}
+.today-item .task-text{flex:1}
+.today-item .btn-done{flex-shrink:0}
+.today-empty{text-align:center;padding:20px;color:var(--gray-400);font-size:15px}
+
+/* ===== Subject colors ===== */
+.tag-history{background:#fef3c7;color:#92400e}
+.tag-geography{background:#dbeafe;color:#1e40af}
+.tag-biology{background:#dcfce7;color:#166534}
+.tag-politics{background:#ede9fe;color:#5b21b6}
+
+/* ===== Sub tabs ===== */
+.sub-tabs{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap}
+.sub-tab{padding:10px 18px;border-radius:10px;border:2px solid var(--gray-200);background:#fff;font-size:15px;font-weight:600;cursor:pointer;transition:all .15s;font-family:inherit;color:var(--gray-600)}
+.sub-tab:hover{border-color:var(--teal-300)}
+.sub-tab.active{border-color:var(--teal-500);background:var(--teal-50);color:var(--teal-700)}
+
+/* ===== Task list ===== */
+.task-input-row{display:flex;gap:8px;margin-bottom:16px}
+.task-input-row input[type="text"]{flex:1;padding:12px 14px;border:2px solid var(--gray-200);border-radius:10px;font-size:16px;font-family:inherit;outline:none;transition:border .15s}
+.task-input-row input[type="text"]:focus{border-color:var(--teal-500)}
+.task-input-row input[type="date"]{padding:12px 10px;border:2px solid var(--gray-200);border-radius:10px;font-size:14px;font-family:inherit;outline:none}
+.task-item{display:flex;align-items:center;gap:12px;padding:14px;border-radius:10px;background:var(--gray-50);margin-bottom:8px;transition:all .15s}
+.task-item.done{opacity:.5}
+.task-item.done .task-text{text-decoration:line-through}
+.task-checkbox{width:24px;height:24px;border-radius:6px;border:2px solid var(--gray-300);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s;background:#fff}
+.task-checkbox.checked{background:var(--green-500);border-color:var(--green-500);color:#fff}
+.task-text{flex:1;font-size:15px}
+.task-date{font-size:12px;color:var(--gray-400);flex-shrink:0}
+.task-delete{background:none;border:none;color:var(--gray-400);cursor:pointer;padding:4px;flex-shrink:0}
+.task-delete:hover{color:var(--red-500)}
+
+/* ===== Buttons ===== */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:12px 20px;border-radius:10px;border:none;font-size:15px;font-weight:600;cursor:pointer;transition:all .15s;font-family:inherit;min-height:44px}
+.btn-primary{background:var(--teal-600);color:#fff}
+.btn-primary:hover{background:var(--teal-700)}
+.btn-blue{background:var(--blue-500);color:#fff}
+.btn-blue:hover{background:var(--blue-600)}
+.btn-green{background:var(--green-500);color:#fff}
+.btn-green:hover{background:var(--green-600)}
+.btn-outline{background:#fff;border:2px solid var(--gray-200);color:var(--gray-700)}
+.btn-outline:hover{border-color:var(--teal-400);color:var(--teal-600)}
+.btn-danger{background:var(--red-500);color:#fff}
+.btn-danger:hover{background:#dc2626}
+.btn-sm{padding:8px 14px;font-size:13px;min-height:36px}
+.btn-lg{padding:14px 24px;font-size:16px;min-height:50px}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+
+/* ===== Subject progress (home) ===== */
+.subject-progress{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:10px;background:var(--gray-50);margin-bottom:8px;cursor:pointer;transition:all .15s}
+.subject-progress:hover{background:var(--gray-100)}
+.subject-progress .sp-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;flex-shrink:0;color:#fff}
+.subject-progress .sp-info{flex:1}
+.subject-progress .sp-name{font-size:15px;font-weight:600}
+.subject-progress .sp-bar{height:6px;background:var(--gray-200);border-radius:3px;margin-top:4px;overflow:hidden}
+.subject-progress .sp-fill{height:100%;border-radius:3px}
+.subject-progress .sp-pct{font-size:14px;font-weight:700;color:var(--gray-500);flex-shrink:0}
+
+/* ===== Cards review ===== */
+.card-filter{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap}
+.filter-btn{padding:8px 16px;border-radius:8px;border:2px solid var(--gray-200);background:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;color:var(--gray-600)}
+.filter-btn.active{border-color:var(--teal-500);background:var(--teal-50);color:var(--teal-700)}
+.review-card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow-lg);padding:0;margin-bottom:16px;overflow:hidden}
+.review-card-front{padding:28px 24px;text-align:center}
+.review-card-front .rc-subject{font-size:13px;font-weight:600;margin-bottom:8px}
+.review-card-front .rc-question{font-size:20px;font-weight:700;line-height:1.5;color:var(--gray-900);margin-bottom:20px}
+.review-card-back{padding:0 24px 24px;text-align:center}
+.rc-options{display:grid;gap:10px;margin-top:8px}
+.rc-option{display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:10px;border:2px solid var(--gray-200);background:#fff;font-size:16px;font-weight:500;cursor:pointer;transition:all .15s;text-align:left;font-family:inherit;color:var(--gray-700)}
+.rc-option:hover{border-color:var(--teal-400);background:var(--teal-50)}
+.rc-option .rc-letter{width:28px;height:28px;border-radius:50%;background:var(--gray-100);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0;color:var(--gray-600)}
+.rc-option.correct{border-color:var(--green-500);background:#f0fdf4}
+.rc-option.correct .rc-letter{background:var(--green-500);color:#fff}
+.rc-option.wrong{border-color:var(--red-500);background:var(--red-50)}
+.rc-option.wrong .rc-letter{background:var(--red-500);color:#fff}
+.rc-option.disabled{cursor:default;opacity:.6}
+.rc-option.disabled:hover{border-color:var(--gray-200);background:#fff}
+.rc-explain{margin-top:14px;padding:14px;border-radius:10px;background:var(--teal-50);font-size:14px;color:var(--gray-700);text-align:left;line-height:1.7}
+.rc-explain .rc-answer-tag{font-weight:700;color:var(--teal-600);margin-bottom:4px}
+.rc-flip-btn{padding:14px 20px;border-radius:10px;border:2px dashed var(--teal-400);background:var(--teal-50);color:var(--teal-600);font-size:16px;font-weight:600;cursor:pointer;width:100%;font-family:inherit;transition:all .15s}
+.rc-flip-btn:hover{background:var(--teal-100)}
+.rc-nav{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:8px}
+.rc-nav-info{font-size:14px;color:var(--gray-500);font-weight:600}
+
+/* ===== Points ===== */
+.points-display{text-align:center;padding:24px;margin-bottom:16px}
+.points-display .pd-value{font-size:48px;font-weight:800;color:var(--amber-500);line-height:1}
+.points-display .pd-label{font-size:15px;color:var(--gray-500);margin-top:4px}
+.points-display .pd-icon{width:56px;height:56px;border-radius:14px;background:var(--amber-50);color:var(--amber-500);display:flex;align-items:center;justify-content:center;margin:0 auto 8px}
+
+/* ===== Focus timer ===== */
+.timer-card{text-align:center;padding:24px}
+.timer-display{font-size:56px;font-weight:800;color:var(--teal-600);font-variant-numeric:tabular-nums;letter-spacing:2px;margin:8px 0}
+.timer-label{font-size:14px;color:var(--gray-500)}
+.timer-btns{display:flex;gap:8px;justify-content:center;margin-top:16px}
+
+/* ===== Rewards ===== */
+.reward-item{display:flex;align-items:center;gap:12px;padding:14px;border-radius:10px;background:var(--gray-50);margin-bottom:8px}
+.reward-item .rw-icon{width:36px;height:36px;border-radius:8px;background:var(--amber-50);color:var(--amber-500);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.reward-item .rw-info{flex:1}
+.reward-item .rw-name{font-size:15px;font-weight:600}
+.reward-item .rw-cost{font-size:13px;color:var(--amber-500);font-weight:600}
+
+/* ===== Points log ===== */
+.log-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--gray-100);font-size:14px}
+.log-item:last-child{border-bottom:none}
+.log-item .log-desc{flex:1;color:var(--gray-700)}
+.log-item .log-amount{font-weight:700}
+.log-item .log-amount.plus{color:var(--green-500)}
+.log-item .log-amount.minus{color:var(--red-500)}
+.log-item .log-time{font-size:12px;color:var(--gray-400)}
+
+/* ===== Weekly chart ===== */
+.chart-container{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;margin-bottom:16px}
+.chart-container h3{font-size:16px;font-weight:600;margin-bottom:14px;color:var(--gray-700)}
+.calendar-week{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:16px}
+.cal-day{border-radius:8px;padding:10px 4px;text-align:center;font-size:12px;transition:all .15s}
+.cal-day .cal-dow{font-size:11px;color:var(--gray-400);font-weight:600}
+.cal-day .cal-date{font-size:16px;font-weight:700;color:var(--gray-700);margin:2px 0}
+.cal-day .cal-info{font-size:10px;color:var(--gray-400)}
+.cal-day.has-activity{background:var(--teal-50)}
+.cal-day.has-activity .cal-date{color:var(--teal-600)}
+.cal-day.today{background:var(--teal-100)}
+.cal-day.today .cal-date{color:var(--teal-700)}
+
+/* ===== Modal ===== */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:200;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.show{display:flex}
+.modal{background:#fff;border-radius:var(--radius);padding:24px;max-width:400px;width:100%;box-shadow:var(--shadow-lg)}
+.modal h3{font-size:18px;font-weight:700;margin-bottom:12px}
+.modal p{color:var(--gray-600);margin-bottom:16px;font-size:15px}
+.modal-btns{display:flex;gap:8px;justify-content:flex-end}
+
+/* ===== Toast ===== */
+.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);background:var(--teal-600);color:#fff;padding:12px 24px;border-radius:24px;font-size:16px;font-weight:600;z-index:999;box-shadow:var(--shadow-lg);animation:toastIn .3s ease,toastOut .3s ease 2s forwards}
+@keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(-20px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+@keyframes toastOut{to{opacity:0;transform:translateX(-50%) translateY(-20px)}}
+
+/* ===== Backup banner ===== */
+.backup-banner{background:var(--amber-50);border:1px solid #fde68a;border-radius:10px;padding:12px 16px;margin-bottom:16px;font-size:14px;color:#92400e;display:flex;align-items:center;gap:8px}
+
+/* ===== Checkin button ===== */
+.checkin-btn{width:100%;padding:16px;border-radius:12px;border:2px dashed var(--teal-400);background:var(--teal-50);color:var(--teal-600);font-size:16px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .15s;margin-bottom:16px}
+.checkin-btn:hover{background:var(--teal-100)}
+.checkin-btn.done{border-style:solid;border-color:var(--green-500);background:#f0fdf4;color:var(--green-600);cursor:default}
+
+/* ===== Add card form ===== */
+.add-card-form{background:var(--gray-50);border-radius:10px;padding:16px;margin-bottom:16px}
+.add-card-form textarea{width:100%;padding:12px;border:2px solid var(--gray-200);border-radius:8px;font-size:15px;font-family:inherit;outline:none;resize:vertical;min-height:60px}
+.add-card-form textarea:focus{border-color:var(--teal-500)}
+.add-card-form select{padding:12px;border:2px solid var(--gray-200);border-radius:8px;font-size:15px;font-family:inherit;outline:none}
+.form-row{margin-bottom:10px}
+.form-row label{display:block;font-size:14px;font-weight:600;margin-bottom:4px;color:var(--gray-600)}
+.form-row input{width:100%;padding:12px;border:2px solid var(--gray-200);border-radius:8px;font-size:15px;font-family:inherit;outline:none}
+
+/* ===== Responsive ===== */
+@media(max-width:768px){
+  .app{flex-direction:column}
+  .sidebar{display:none}
+  .topbar{display:flex}
+  .main{margin-left:0;margin-top:52px;padding:14px;padding-bottom:80px}
+  .stat-grid{grid-template-columns:1fr}
+  .page-header h1{font-size:19px}
+  .task-input-row{flex-wrap:wrap}
+  .task-input-row input[type="text"]{flex:1;min-width:200px}
+  .task-input-row input[type="date"]{flex:1;min-width:140px}
+  .review-card-front .rc-question{font-size:18px}
+  .timer-display{font-size:44px}
+  .rc-option{font-size:15px;padding:12px 14px}
+  .calendar-week{gap:4px}
+  .cal-day{padding:8px 2px}
+  .cal-day .cal-date{font-size:14px}
+  .bottom-nav{display:flex;position:fixed;bottom:0;left:0;right:0;height:60px;background:var(--teal-700);z-index:100;padding-bottom:env(safe-area-inset-bottom);box-shadow:0 -2px 10px rgba(0,0,0,.1)}
+  .bottom-nav .bnav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;border:none;background:transparent;color:rgba(255,255,255,.6);font-size:11px;font-weight:500;cursor:pointer;font-family:inherit;padding:4px}
+  .bottom-nav .bnav-item.active{color:#fff}
+  .bottom-nav .bnav-item svg{width:22px;height:22px}
+}
+@media(min-width:769px){.bottom-nav{display:none}}
+
+/* ===== Empty state ===== */
+.empty-state{text-align:center;padding:32px 16px;color:var(--gray-400)}
+.empty-state svg{margin-bottom:8px;opacity:.4}
+.empty-state p{font-size:15px}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-title">七年级复习台</div>
+  <div class="topbar-right">
+  </div>
+</div>
+
+<div class="app">
+  <nav class="sidebar">
+    <div class="sidebar-logo"><span class="dot"></span>七年级复习台</div>
+    <div class="nav-items" id="navItems"></div>
+    <div class="nav-bottom">
+      <button class="nav-item" onclick="exportData()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        导出备份
+      </button>
+      <button class="nav-item" onclick="document.getElementById('importFile').click()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        导入恢复
+      </button>
+      <button class="nav-item" onclick="showClearModal()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+        清空数据
+      </button>
+    </div>
+  </nav>
+
+  <main class="main" id="content"></main>
+</div>
+
+<div class="bottom-nav" id="bottomNav"></div>
+
+<input type="file" id="importFile" accept=".json" style="display:none">
+<div class="modal-overlay" id="modalOverlay"></div>
+
+<script>
+/* ========== Constants ========== */
+var STORE_KEY='wb_junior4r_';
+var SUBJECTS=['history','geography','biology','politics'];
+var SUBJECT_NAMES={history:'历史',geography:'地理',biology:'生物',politics:'政治'};
+var SUBJECT_COLORS={history:'#f59e0b',geography:'#3b82f6',biology:'#22c55e',politics:'#8b5cf6'};
+var SUBJECT_TAGS={history:'tag-history',geography:'tag-geography',biology:'tag-biology',politics:'tag-politics'};
+
+/* ========== Pre-populated cards ========== */
+var SAMPLE_CARDS=[
+{id:1,subject:'history',front:'我国第一个王朝是？',back:'夏朝（约公元前2070年，禹建立，世袭制取代禅让制）',options:['夏','商','周','秦'],answerIndex:0,mastered:false,reviewCount:0,isSample:true},
+{id:2,subject:'history',front:'秦朝统一六国的时间是？',back:'公元前221年，秦始皇嬴政统一六国，建立中国历史上第一个统一的多民族封建国家',options:['公元前221年','公元前206年','公元221年','公元前230年'],answerIndex:0,mastered:false,reviewCount:0,isSample:true},
+{id:3,subject:'history',front:'"文景之治"出现在哪个朝代？',back:'西汉，汉文帝和汉景帝时期，提倡节俭，减轻赋税，出现治世局面',options:['秦朝','西汉','东汉','唐朝'],answerIndex:1,mastered:false,reviewCount:0,isSample:true},
+{id:4,subject:'history',front:'丝绸之路的开拓者是？',back:'张骞，西汉时期两次出使西域，开辟了东西方交流的通道',options:['张骞','班超','玄奘','郑和'],answerIndex:0,mastered:false,reviewCount:0,isSample:true},
+{id:5,subject:'history',front:'唐朝的开国皇帝是？',back:'李渊（唐高祖），618年建立唐朝，定都长安',options:['李世民','李渊','李治','武则天'],answerIndex:1,mastered:false,reviewCount:0,isSample:true},
+{id:6,subject:'history',front:'北宋的建立者是？',back:'赵匡胤（宋太祖），960年陈桥兵变，黄袍加身建立北宋',options:['赵匡胤','赵光义','赵构','赵普'],answerIndex:0,mastered:false,reviewCount:0,isSample:true},
+{id:7,subject:'history',front:'郑和下西洋始于哪个朝代？',back:'明朝，1405年至1433年郑和七次下西洋，最远到达非洲东海岸',options:['唐朝','宋朝','元朝','明朝'],answerIndex:3,mastered:false,reviewCount:0,isSample:true},
+{id:8,subject:'history',front:'"百家争鸣"发生在哪个时期？',back:'春秋战国时期，儒、道、法、墨等学派相互争鸣，思想繁荣',options:['夏商时期','西周时期','春秋战国时期','秦汉时期'],answerIndex:2,mastered:false,reviewCount:0,isSample:true},
+{id:9,subject:'history',front:'火药开始用于军事是在哪个朝代？',back:'唐朝末年，火药开始用于军事，宋元时期广泛应用',options:['秦朝','汉朝','唐朝','宋朝'],answerIndex:2,mastered:false,reviewCount:0,isSample:true},
+{id:10,subject:'history',front:'科举制正式创立于哪个朝代？',back:'隋朝，隋炀帝设进士科，标志着科举制正式确立',options:['汉朝','隋朝','唐朝','宋朝'],answerIndex:1,mastered:false,reviewCount:0,isSample:true},
+
+{id:11,subject:'geography',front:'地球的自转方向是？',back:'自西向东，周期约24小时，产生昼夜交替现象',options:['自西向东','自东向西','自南向北','自北向南'],answerIndex:0,mastered:false,reviewCount:0,isSample:true},
+{id:12,subject:'geography',front:'世界上面积最大的洋是？',back:'太平洋，面积约1.65亿平方千米，占海洋总面积的一半',options:['大西洋','太平洋','印度洋','北冰洋'],answerIndex:1,mastered:false,reviewCount:0,isSample:true},
+{id:13,subject:'geography',front:'亚洲与非洲的分界线是？',back:'苏伊士运河，连接地中海与红海，是重要的国际航运通道',options:['苏伊士运河','巴拿马运河','白令海峡','土耳其海峡'],answerIndex:0,mastered:false,reviewCount:0,isSample:true},
+{id:14,subject:'geography',front:'热带雨林气候主要分布在？',back:'赤道附近，如南美洲亚马孙平原、非洲刚果盆地',options:['赤道附近','回归线附近','极地附近','温带地区'],answerIndex:0,mastered:false,reviewCount:0,isSample:true},
+{id:15,subject:'geography',front:'世界上面积最大的洲是？',back:'亚洲，面积约4400万平方千米，跨寒、温、热三带',options:['非洲','亚洲','北美洲','南极洲'],answerIndex:1,mastered:false,reviewCount:0,isSample:true},
+{id:16,subject:'geography',front:'地球上约71%的面积被什么覆盖？',back:'海洋，因此地球被称为"水球"',options:['陆地','海洋','冰川','沙漠'],answerIndex:1,mastered:false,reviewCount:0,isSample:true},
+{id:17,subject:'geography',front:'比例尺1:100000表示图上1cm代表实际多少？',back:'1千米，比例尺=图上距离/实际距离',options:['100米','1千米','10千米','100千米'],answerIndex:1,mastered:false,reviewCount:0,isSample:true},
+{id:18,subject:'geography',front:'世界人口最密集的地区主要在？',back:'中低纬度的沿海平原地区，气候适宜、交通便利',options:['极地地区','热带雨林地区','中低纬度沿海地区','高纬度地区'],answerIndex:2,mastered:false,reviewCount:0,isSample:true},
+{id:19,subject:'geography',front:'影响气候的主要因素不包括？',back:'人口密度，气候主要受纬度位置、海陆位置、地形等因素影响',options:['纬度位置','海陆位置','地形地势','人口密度'],answerIndex:3,mastered:false,reviewCount:0,isSample:true},
+{id:20,subject:'geography',front:'世界上使用人数最多的语言是？',back:'汉语，主要在中国及东南亚华人社区使用',options:['英语','汉语','西班牙语','阿拉伯语'],answerIndex:1,mastered:false,reviewCount:0,isSample:true},
+
+{id:21,subject:'biology',front:'植物光合作用的场所是？',back:'叶绿体，利用光能将二氧化碳和水转化为有机物并释放氧气',options:['细胞核','叶绿体','线粒体','液泡'],answerIndex:1,mastered:false,reviewCount:0,isSample:true},
+{id:22,subject:'biology',front:'人体四大基本组织不包括？',back:'骨骼组织，四大基本组织为上皮组织、结缔组织、肌肉组织、神经组织',options:['上皮组织','结缔组织','肌肉组织','骨骼组织'],answerIndex:3,mastered:false,reviewCount:0,isSample:true},
+{id:23,subject:'biology',front:'根吸收水分和无机盐的主要部位是？',back:'成熟区（根毛区），根毛大大增加了吸收面积',options:['根冠','分生区','伸长区','成熟区'],answerIndex:3,mastered:false,reviewCount:0,isSample:true},
+{id:24,subject:'biology',front:'人体最大的器官是？',back:'皮肤，具有保护、排泄、调节体温和感受外界刺激等功能',options:['肝脏','皮肤','大脑','肺'],answerIndex:1,mastered:false,reviewCount:0,isSample:true},
+{id:25,subject:'biology',front:'血液中运输氧气的细胞是？',back:'红细胞，含有血红蛋白，能结合和运输氧气',options:['红细胞','白细胞','血小板','血浆'],answerIndex:0,mastered:false,reviewCount:0,isSample:true},
+{id:26,subject:'biology',front:'植物进行呼吸作用的场所是？',back:'线粒体，分解有机物释放能量，为生命活动提供动力',options:['叶绿体','线粒体','细胞核','液泡'],answerIndex:1,mastered:false,reviewCount:0,isSample:true},
+{id:27,subject:'biology',front:'体循环起始于哪个心脏腔室？',back:'左心室，将含氧丰富的动脉血泵向全身各处',options:['左心室','右心室','左心房','右心房'],answerIndex:0,mastered:false,reviewCount:0,isSample:true},
+{id:28,subject:'biology',front:'下列属于生物的是？',back:'病毒，生物具有生长、繁殖、新陈代谢等生命特征',options:['阳光','水','病毒','空气'],answerIndex:2,mastered:false,reviewCount:0,isSample:true},
+{id:29,subject:'biology',front:'细胞中控制物质进出的结构是？',back:'细胞膜，具有选择透过性，控制物质进出细胞',options:['细胞膜','细胞质','细胞核','细胞壁'],answerIndex:0,mastered:false,reviewCount:0,isSample:true},
+{id:30,subject:'biology',front:'被子植物的主要特征是？',back:'有果皮包被种子，种子不裸露，是植物界最高等的类群',options:['有种子无果皮','有果皮包被种子','无种子','有花无种子'],answerIndex:1,mastered:false,reviewCount:0,isSample:true},
+
+{id:31,subject:'politics',front:'青春期心理矛盾的正常应对方式是？',back:'主动沟通，向老师、家长或朋友寻求帮助',options:['封闭自己','主动沟通','逃避现实','网上发泄'],answerIndex:1,mastered:false,reviewCount:0,isSample:true},
+{id:32,subject:'politics',front:'"止于至善"出自哪部经典？',back:'《大学》，意为达到并保持最完善的境界',options:['《论语》','《大学》','《中庸》','《孟子》'],answerIndex:1,mastered:false,reviewCount:0,isSample:true},
+{id:33,subject:'politics',front:'下列属于良好学习习惯的是？',back:'制定计划，合理安排学习时间和内容，提高效率',options:['考前突击','制定计划','抄袭作业','边玩边学'],answerIndex:1,mastered:false,reviewCount:0,isSample:true},
+{id:34,subject:'politics',front:'法律最主要的特征是？',back:'由国家制定或认可，靠国家强制力保证实施',options:['由国家制定','道德约束','社会舆论','个人习惯'],answerIndex:0,mastered:false,reviewCount:0,isSample:true},
+{id:35,subject:'politics',front:'遇到校园欺凌应该？',back:'告诉老师和家长，寻求成人的帮助和保护',options:['忍气吞声','以暴制暴','告诉老师和家长','转学逃避'],answerIndex:2,mastered:false,reviewCount:0,isSample:true},
+{id:36,subject:'politics',front:'"行己有耻"的意思是？',back:'自己行事要有底线，知廉耻、有所不为',options:['做事要有耻辱感','自己行事要有底线','不要感到羞耻','做事要大胆'],answerIndex:1,mastered:false,reviewCount:0,isSample:true},
+{id:37,subject:'politics',front:'友谊的特质不包括？',back:'一成不变，友谊不是一成不变的，会随时间和环境变化',options:['亲密关系','平等尊重','一成不变','坦诚相待'],answerIndex:2,mastered:false,reviewCount:0,isSample:true},
+{id:38,subject:'politics',front:'下列属于正确生命观念的是？',back:'珍爱生命，认识到生命的宝贵和不可重复',options:['追求享乐','珍爱生命','漠视自然','挑战极限'],answerIndex:1,mastered:false,reviewCount:0,isSample:true},
+{id:39,subject:'politics',front:'集体生活的作用是？',back:'培养个性和社会性，在集体中发展和完善自我',options:['限制个人发展','培养个性和社会性','增加压力','没有意义'],answerIndex:1,mastered:false,reviewCount:0,isSample:true},
+{id:40,subject:'politics',front:'我国宪法规定国家的根本制度是？',back:'社会主义制度',options:['资本主义制度','社会主义制度','封建主义制度','共产主义制度'],answerIndex:1,mastered:false,reviewCount:0,isSample:true}
+];
+
+/* ========== State ========== */
+var state={
+  tasks:{history:[],geography:[],biology:[],politics:[]},
+  cards:[],
+  points:{total:0,log:[]},
+  rewards:[],
+  checkin:{dates:[],studyTime:{}}
+};
+var currentView='home';
+var currentSubject='history';
+var cardFilter='all';
+var cardIndex=0;
+var cardAnswered=false;
+var cardSelectedOption=-1;
+var cardFlipped=false;
+var focusTimer={running:false,remaining:25*60,intervalId:null};
+var showAddCardForm=false;
+
+/* ========== Date helpers ========== */
+function pad(n){return String(n).padStart(2,'0')}
+function dateStr(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())}
+function todayStr(){return dateStr(new Date())}
+function yesterdayStr(){var d=new Date();d.setDate(d.getDate()-1);return dateStr(d)}
+function getLast7Days(){var r=[];for(var i=6;i>=0;i--){var d=new Date();d.setDate(d.getDate()-i);r.push(dateStr(d))}return r}
+function dayName(dateStr){var d=new Date(dateStr);var names=['日','一','二','三','四','五','六'];return '周'+names[d.getDay()]}
+
+/* ========== SVG icons ========== */
+function ic(name,size){
+  size=size||22;
+  var p={
+    home:'<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2h-4v-7h-6v7H5a2 2 0 0 1-2-2z"/>',
+    tasks:'<rect x="3" y="3" width="18" height="18" rx="2" fill="none"/><path d="M9 12l2 2 4-4"/>',
+    cards:'<path d="M12 2L2 7l10 5 10-5z"/><path d="M2 12l10 5 10-5"/><path d="M2 17l10 5 10-5"/>',
+    star:'<polygon points="12 2 15 9 22 9 17 14 19 21 12 17 5 21 7 14 2 9 9 9"/>',
+    chart:'<line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/>',
+    check:'<polyline points="20 6 9 17 4 12"/>',
+    plus:'<line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>',
+    play:'<polygon points="5 3 19 12 5 21 5 3"/>',
+    pause:'<rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/>',
+    reset:'<polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>',
+    left:'<polyline points="15 18 9 12 15 6"/>',
+    right:'<polyline points="9 18 15 12 9 6"/>',
+    shuffle:'<polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/>',
+    gift:'<polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>',
+    trash:'<polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>',
+    clock:'<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
+    flame:'<path d="M12 2c0 4-4 6-4 10a4 4 0 0 0 8 0c0-2-1-3-1-5 0 0 3 2 3 5a6 6 0 0 1-12 0c0-5 6-6 6-10z"/>',
+    target:'<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>'
+  };
+  return '<svg width="'+size+'" height="'+size+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+(p[name]||'')+'</svg>';
+}
+
+/* ========== Save/Load ========== */
+function save(){
+  try{localStorage.setItem(STORE_KEY+'state',JSON.stringify(state))}catch(e){alert('存储失败，数据可能过多，请导出备份后清理')}
+}
+function load(){
+  var raw=localStorage.getItem(STORE_KEY+'state');
+  if(raw){
+    try{state=JSON.parse(raw);return true}catch(e){return false}
+  }
+  return false;
+}
+
+/* ========== Init sample data ========== */
+function initSampleData(){
+  var t=todayStr(), y=yesterdayStr();
+  var d2=new Date();d2.setDate(d2.getDate()-2);var d2s=dateStr(d2);
+  state.tasks={
+    history:[
+      {id:'t1',text:'背诵夏商周更替时间线',date:y,done:false,isSample:true},
+      {id:'t2',text:'复习秦统一六国的措施',date:t,done:false,isSample:true}
+    ],
+    geography:[
+      {id:'t3',text:'记忆七大洲四大洋位置',date:t,done:true,doneAt:t+'T09:00',isSample:true}
+    ],
+    biology:[
+      {id:'t4',text:'背诵植物细胞结构图',date:t,done:false,isSample:true}
+    ],
+    politics:[
+      {id:'t5',text:'理解青春期的心理变化',date:t,done:false,isSample:true}
+    ]
+  };
+  state.cards=JSON.parse(JSON.stringify(SAMPLE_CARDS));
+  state.points={
+    total:20,
+    log:[
+      {id:'p1',type:'task',desc:'完成任务: 记忆七大洲四大洋位置',amount:5,time:t+'T09:00'},
+      {id:'p2',type:'task',desc:'完成任务: 背诵丝绸之路知识点',amount:5,time:y+'T10:00'},
+      {id:'p3',type:'focus',desc:'专注25分钟',amount:10,time:y+'T10:30'}
+    ]
+  };
+  state.rewards=[
+    {id:'r1',name:'看动画片30分钟',cost:30,redeemed:false,isSample:true},
+    {id:'r2',name:'买零食一次',cost:20,redeemed:false,isSample:true},
+    {id:'r3',name:'周末多玩1小时游戏',cost:50,redeemed:false,isSample:true},
+    {id:'r4',name:'买一本喜欢的书',cost:80,redeemed:false,isSample:true}
+  ];
+  state.checkin={
+    dates:[d2s,y,t],
+    studyTime:{}
+  };
+  state.checkin.studyTime[d2s]=50;
+  state.checkin.studyTime[y]=25;
+  save();
+}
+
+/* ========== Rollover overdue tasks ========== */
+function rolloverOverdue(){
+  var t=todayStr();
+  SUBJECTS.forEach(function(s){
+    state.tasks[s].forEach(function(task){
+      if(!task.done && task.date && task.date<t){
+        task.wasOverdue=true;
+        task.date=t;
+      }
+    });
+  });
+}
+
+function showToast(msg){
+  var el=document.createElement('div');
+  el.className='toast';
+  el.textContent=msg;
+  document.body.appendChild(el);
+  setTimeout(function(){el.remove()},2400);
+}
+
+/* ========== Streak ========== */
+function getStreak(){
+  if(!state.checkin.dates.length)return 0;
+  var sorted=state.checkin.dates.slice().sort().reverse();
+  var streak=0;
+  var d=new Date();
+  for(var i=0;i<sorted.length;i++){
+    var expected=dateStr(d);
+    if(sorted[i]===expected){streak++;d.setDate(d.getDate()-1)}
+    else if(i===0 && sorted[i]===yesterdayStr()){d.setDate(d.getDate()-1);continue}
+    else if(sorted[i]!==expected){break}
+  }
+  return streak;
+}
+function isCheckedInToday(){
+  return state.checkin.dates.indexOf(todayStr())>=0;
+}
+function doCheckin(){
+  var t=todayStr();
+  if(isCheckedInToday())return;
+  state.checkin.dates.push(t);
+  save();
+  showToast('打卡成功！+2分，已连续'+getStreak()+'天');
+  render();
+}
+
+/* ========== Today progress ========== */
+function getTodayProgress(){
+  var total=0,done=0;
+  SUBJECTS.forEach(function(s){
+    state.tasks[s].forEach(function(t){
+      if(t.date===todayStr()){total++;if(t.done)done++}
+    });
+  });
+  return {total:total,done:done,pct:total>0?Math.round(done/total*100):0};
+}
+function getOverdueItems(){
+  var t=todayStr();
+  var items=[];
+  SUBJECTS.forEach(function(s){
+    state.tasks[s].forEach(function(task){
+      if(!task.done && task.date<=t){
+        items.push({subject:s,text:task.text,id:task.id,date:task.date,wasOverdue:task.wasOverdue});
+      }
+    });
+  });
+  return items;
+}
+function getWeeklyStudyTime(){
+  var total=0;
+  getLast7Days().forEach(function(d){total+=(state.checkin.studyTime[d]||0)});
+  return total;
+}
+
+/* ========== Data count ========== */
+function getDataCount(){
+  var c=0;
+  SUBJECTS.forEach(function(s){c+=state.tasks[s].length});
+  c+=state.cards.length;
+  return c;
+}
+
+/* ========== Render dispatch ========== */
+function render(){
+  var el=document.getElementById('content');
+  var html='';
+  if(getDataCount()>=30){
+    html+='<div class="backup-banner">'+ic('star',18)+' 数据已积累 '+getDataCount()+' 条，建议导出备份，避免数据丢失。</div>';
+  }
+  if(currentView==='home')html+=renderHome();
+  else if(currentView==='tasks')html+=renderTasks();
+  else if(currentView==='cards')html+=renderCards();
+  else if(currentView==='weekly')html+=renderWeekly();
+  el.innerHTML=html;
+  renderNav();
+  renderTopbar();
+  if(currentView==='home')updateTimerDisplay();
+}
+
+function renderNav(){
+  var items=[
+    {view:'home',icon:'home',label:'首页'},
+    {view:'tasks',icon:'tasks',label:'任务'},
+    {view:'cards',icon:'cards',label:'卡片'},
+    {view:'weekly',icon:'chart',label:'复盘'}
+  ];
+  var sidebarHtml='';
+  var bottomHtml='';
+  items.forEach(function(it){
+    var cls=it.view===currentView?'nav-item active':'nav-item';
+    sidebarHtml+='<button class="'+cls+'" onclick="switchView(\''+it.view+'\')">'+ic(it.icon,20)+' '+it.label+'</button>';
+    var bcls=it.view===currentView?'bnav-item active':'bnav-item';
+    bottomHtml+='<button class="'+bcls+'" onclick="switchView(\''+it.view+'\')">'+ic(it.icon,22)+'<span>'+it.label+'</span></button>';
+  });
+  document.getElementById('navItems').innerHTML=sidebarHtml;
+  document.getElementById('bottomNav').innerHTML=bottomHtml;
+}
+function renderTopbar(){}
+function switchView(v){
+  currentView=v;
+  if(v==='tasks'){}
+  render();
+  window.scrollTo(0,0);
+}
+
+/* ========== Home view ========== */
+function renderHome(){
+  var tp=getTodayProgress();
+  var streak=getStreak();
+  var weeklyTime=getWeeklyStudyTime();
+  var h='';
+  h+='<div class="page-header"><h1>首页概览</h1><p>今日学习进度与快速导航</p></div>';
+
+  // Checkin button
+  if(isCheckedInToday()){
+    h+='<button class="checkin-btn done">'+ic('check',20)+' 今日已打卡，连续 '+streak+' 天</button>';
+  }else{
+    h+='<button class="checkin-btn" onclick="doCheckin()">'+ic('flame',20)+' 点击打卡（+2分）</button>';
+  }
+
+  // Stat cards
+  h+='<div class="stat-grid">';
+  h+='<div class="stat-card teal"><div class="stat-icon">'+ic('target',20)+'</div><div class="stat-value">'+tp.done+'/'+tp.total+'</div><div class="stat-label">今日任务进度</div></div>';
+  h+='<div class="stat-card amber"><div class="stat-icon">'+ic('flame',20)+'</div><div class="stat-value">'+streak+'</div><div class="stat-label">连续打卡天数</div></div>';
+  h+='<div class="stat-card blue"><div class="stat-icon">'+ic('clock',20)+'</div><div class="stat-value">'+weeklyTime+'</div><div class="stat-label">本周学习时长(分钟)</div></div>';
+  h+='</div>';
+
+  // Today progress bar
+  h+='<div class="card"><div class="card-title">'+ic('target',18)+' 今日整体进度</div>';
+  h+='<div class="progress-bar"><div class="progress-fill" style="width:'+tp.pct+'%"></div></div>';
+  h+='<div class="progress-text">已完成 '+tp.done+' / '+tp.total+' 个任务（'+tp.pct+'%）</div></div>';
+
+  // Today section
+  var overdue=getOverdueItems();
+  h+='<div class="today-section"><h2>'+ic('clock',20)+' 今天要处理</h2>';
+  if(overdue.length===0){
+    h+='<div class="today-empty">太棒了！今天没有待处理的任务</div>';
+  }else{
+    overdue.forEach(function(it){
+      var cls=it.wasOverdue?'overdue':'pending';
+      var label=it.wasOverdue?'逾期':'待办';
+      h+='<div class="today-item '+cls+'"><span class="subject-tag '+SUBJECT_TAGS[it.subject]+'">'+SUBJECT_NAMES[it.subject]+'</span><span class="task-text">'+it.text+' <small style="color:#9ca3af">('+label+')</small></span><button class="btn btn-green btn-sm" onclick="quickDone(\''+it.subject+'\',\''+it.id+'\')">完成</button></div>';
+    });
+  }
+  h+='</div>';
+
+  // Focus timer
+  h+='<div class="card timer-card"><div class="card-title" style="justify-content:center">'+ic('clock',18)+' 专注计时器</div>';
+  h+='<div class="timer-label">专注25分钟，记录学习时长</div>';
+  h+='<div class="timer-display" id="timerDisplay">25:00</div>';
+  h+='<div class="timer-btns">';
+  if(!focusTimer.running){
+    h+='<button class="btn btn-primary btn-lg" onclick="startFocus()">'+ic('play',20)+' 开始专注</button>';
+  }else{
+    h+='<button class="btn btn-outline btn-lg" onclick="pauseFocus()">'+ic('pause',20)+' 暂停</button>';
+  }
+  h+='<button class="btn btn-outline btn-lg" onclick="resetFocus()">'+ic('reset',20)+' 重置</button>';
+  h+='</div></div>';
+
+  // Subject progress
+  h+='<div class="card"><div class="card-title">'+ic('tasks',18)+' 各科今日进度</div>';
+  SUBJECTS.forEach(function(s){
+    var todayTasks=state.tasks[s].filter(function(t){return t.date===todayStr()});
+    var doneTasks=todayTasks.filter(function(t){return t.done});
+    var pct=todayTasks.length>0?Math.round(doneTasks.length/todayTasks.length*100):0;
+    h+='<div class="subject-progress" onclick="switchSubject(\''+s+'\')">';
+    h+='<div class="sp-icon" style="background:'+SUBJECT_COLORS[s]+'">'+SUBJECT_NAMES[s].charAt(0)+'</div>';
+    h+='<div class="sp-info"><div class="sp-name">'+SUBJECT_NAMES[s]+'</div>';
+    h+='<div class="sp-bar"><div class="sp-fill" style="width:'+pct+'%;background:'+SUBJECT_COLORS[s]+'"></div></div></div>';
+    h+='<div class="sp-pct">'+doneTasks.length+'/'+todayTasks.length+'</div></div>';
+  });
+  h+='</div>';
+
+  return h;
+}
+function quickDone(subject,id){
+  var task=state.tasks[subject].find(function(t){return t.id===id});
+  if(task && !task.done){
+    task.done=true;
+    task.doneAt=todayStr()+'T'+pad(new Date().getHours())+':'+pad(new Date().getMinutes());
+    save();
+    showToast('已完成！');
+    render();
+  }
+}
+function switchSubject(s){
+  currentSubject=s;
+  switchView('tasks');
+}
+
+/* ========== Tasks view ========== */
+function renderTasks(){
+  var h='';
+  h+='<div class="page-header"><h1>四科任务区</h1><p>添加每日背诵任务，勾选完成自动计分</p></div>';
+
+  // Sub tabs
+  h+='<div class="sub-tabs">';
+  SUBJECTS.forEach(function(s){
+    var cls=s===currentSubject?'sub-tab active':'sub-tab';
+    h+='<button class="'+cls+'" onclick="switchSub(\''+s+'\')" style="'+(s===currentSubject?'border-color:'+SUBJECT_COLORS[s]+';color:'+SUBJECT_COLORS[s]+'':'')+'">'+SUBJECT_NAMES[s]+'</button>';
+  });
+  h+='</div>';
+
+  // Input row
+  h+='<div class="card">';
+  h+='<div class="task-input-row">';
+  h+='<input type="text" id="taskInput" placeholder="输入背诵任务，如：背诵第3课知识点" onkeydown="if(event.keyCode===13)addTask()">';
+  h+='<input type="date" id="taskDate" value="'+todayStr()+'">';
+  h+='<button class="btn btn-primary" onclick="addTask()">'+ic('plus',18)+' 添加</button>';
+  h+='</div></div>';
+
+  // Progress
+  var tasks=state.tasks[currentSubject];
+  var todayTasks=tasks.filter(function(t){return t.date===todayStr()});
+  var doneTasks=todayTasks.filter(function(t){return t.done});
+  var pct=todayTasks.length>0?Math.round(doneTasks.length/todayTasks.length*100):0;
+  h+='<div class="card"><div class="card-title" style="color:'+SUBJECT_COLORS[currentSubject]+'">'+SUBJECT_NAMES[currentSubject]+' 今日进度</div>';
+  h+='<div class="progress-bar"><div class="progress-fill" style="width:'+pct+'%;background:'+SUBJECT_COLORS[currentSubject]+'"></div></div>';
+  h+='<div class="progress-text">已完成 '+doneTasks.length+' / '+todayTasks.length+'（'+pct+'%）</div></div>';
+
+  // Task list
+  h+='<div class="card"><div class="card-title">任务列表</div>';
+  var sortedTasks=tasks.slice().sort(function(a,b){
+    if(a.done!==b.done)return a.done?1:-1;
+    return (a.date||'').localeCompare(b.date||'');
+  });
+  if(sortedTasks.length===0){
+    h+='<div class="empty-state">'+ic('tasks',32)+'<p>暂无任务，添加一个开始吧</p></div>';
+  }else{
+    sortedTasks.forEach(function(t){
+      h+='<div class="task-item'+(t.done?' done':'')+'">';
+      h+='<div class="task-checkbox'+(t.done?' checked':'')+'" onclick="toggleTask(\''+currentSubject+'\',\''+t.id+'\')">'+(t.done?ic('check',16):'')+'</div>';
+      h+='<div class="task-text">'+t.text+(t.wasOverdue?' <small style="color:#ef4444">(逾期)</small>':'')+'</div>';
+      h+='<div class="task-date">'+(t.date||'')+'</div>';
+      h+='<button class="task-delete" onclick="deleteTask(\''+currentSubject+'\',\''+t.id+'\')">'+ic('trash',16)+'</button>';
+      h+='</div>';
+    });
+  }
+  h+='</div>';
+
+  return h;
+}
+function switchSub(s){currentSubject=s;render()}
+function addTask(){
+  var input=document.getElementById('taskInput');
+  var dateInput=document.getElementById('taskDate');
+  var text=input.value.trim();
+  if(!text){return}
+  state.tasks[currentSubject].push({id:'t'+Date.now(),text:text,date:dateInput.value||todayStr(),done:false});
+  save();
+  input.value='';
+  render();
+}
+function toggleTask(subject,id){
+  var task=state.tasks[subject].find(function(t){return t.id===id});
+  if(!task)return;
+  if(!task.done){
+    task.done=true;
+    task.doneAt=todayStr()+'T'+pad(new Date().getHours())+':'+pad(new Date().getMinutes());
+    showToast('完成！');
+  }else{
+    task.done=false;
+    delete task.doneAt;
+  }
+  save();
+  render();
+}
+function deleteTask(subject,id){
+  state.tasks[subject]=state.tasks[subject].filter(function(t){return t.id!==id});
+  save();
+  render();
+}
+
+/* ========== Cards view ========== */
+function getFilteredCards(){
+  if(cardFilter==='all')return state.cards;
+  return state.cards.filter(function(c){return c.subject===cardFilter});
+}
+function renderCards(){
+  var h='';
+  h+='<div class="page-header"><h1>知识卡片库</h1><p>翻卡片自测 + 选择题练习</p></div>';
+
+  // Filter
+  h+='<div class="card-filter">';
+  var filters=[{v:'all',l:'全部'},{v:'history',l:'历史'},{v:'geography',l:'地理'},{v:'biology',l:'生物'},{v:'politics',l:'政治'}];
+  filters.forEach(function(f){
+    var cls=f.v===cardFilter?'filter-btn active':'filter-btn';
+    h+='<button class="'+cls+'" onclick="setCardFilter(\''+f.v+'\')">'+f.l+'</button>';
+  });
+  h+='</div>';
+
+  var cards=getFilteredCards();
+  if(cards.length===0){
+    h+='<div class="card"><div class="empty-state">'+ic('cards',32)+'<p>暂无卡片，点击下方添加</p></div></div>';
+  }else{
+    if(cardIndex>=cards.length)cardIndex=0;
+    var card=cards[cardIndex];
+    h+='<div class="review-card">';
+    h+='<div class="review-card-front">';
+    h+='<div class="rc-subject"><span class="subject-tag '+SUBJECT_TAGS[card.subject]+'">'+SUBJECT_NAMES[card.subject]+'</span>';
+    if(card.mastered)h+=' <span style="color:#22c55e;font-size:12px;font-weight:600">已掌握</span>';
+    h+='</div>';
+    h+='<div class="rc-question">'+card.front+'</div>';
+
+    if(card.options && card.options.length>0){
+      // Quiz mode
+      h+='<div class="rc-options">';
+      var letters=['A','B','C','D'];
+      card.options.forEach(function(opt,i){
+        var cls='rc-option';
+        if(cardAnswered){
+          cls+=' disabled';
+          if(i===card.answerIndex)cls+=' correct';
+          if(i===cardSelectedOption && i!==card.answerIndex)cls+=' wrong';
+        }
+        h+='<button class="'+cls+'" onclick="answerCard('+i+')" '+(cardAnswered?'disabled':'')+'>';
+        h+='<span class="rc-letter">'+letters[i]+'</span>'+opt+'</button>';
+      });
+      h+='</div>';
+      if(cardAnswered){
+        h+='<div class="rc-explain"><div class="rc-answer-tag">'+(cardSelectedOption===card.answerIndex?'回答正确':'回答错误，正确答案: '+letters[card.answerIndex])+'</div>'+card.back+'</div>';
+      }
+    }else{
+      // Flip card mode
+      if(cardFlipped){
+        h+='<div class="rc-explain" style="background:var(--teal-50);font-size:16px;padding:18px">'+card.back+'</div>';
+        h+='<button class="rc-flip-btn" onclick="flipCard()" style="margin-top:10px">翻回正面</button>';
+      }else{
+        h+='<button class="rc-flip-btn" onclick="flipCard()">点击翻面查看答案</button>';
+      }
+    }
+    h+='</div>';
+
+    // Nav
+    h+='<div class="rc-nav" style="padding:12px 24px">';
+    h+='<button class="btn btn-outline btn-sm" onclick="prevCard()" '+(cardIndex===0?'disabled':'')+'>'+ic('left',16)+'</button>';
+    h+='<span class="rc-nav-info">'+(cardIndex+1)+' / '+cards.length+'</span>';
+    h+='<div style="display:flex;gap:6px">';
+    if(!card.mastered){
+      h+='<button class="btn btn-green btn-sm" onclick="markMastered()">'+ic('check',16)+' 掌握</button>';
+    }
+    h+='<button class="btn btn-outline btn-sm" onclick="shuffleCards()">'+ic('shuffle',16)+'</button>';
+    h+='<button class="btn btn-primary btn-sm" onclick="nextCard()">'+ic('right',16)+'</button>';
+    h+='</div></div>';
+    h+='</div>';
+  }
+
+  // Add card form
+  h+='<div class="card">';
+  if(showAddCardForm){
+    h+='<div class="card-title">'+ic('plus',18)+' 添加自定义卡片</div>';
+    h+='<div class="add-card-form">';
+    h+='<div class="form-row"><label>科目</label>';
+    h+='<select id="newCardSubject">';
+    SUBJECTS.forEach(function(s){h+='<option value="'+s+'"'+(s===currentSubject?' selected':'')+'>'+SUBJECT_NAMES[s]+'</option>'});
+    h+='</select></div>';
+    h+='<div class="form-row"><label>正面（问题/知识点）</label><textarea id="newCardFront" placeholder="如：秦始皇统一的措施有哪些？"></textarea></div>';
+    h+='<div class="form-row"><label>背面（答案/解析）</label><textarea id="newCardBack" placeholder="如：统一文字、货币、度量衡..."></textarea></div>';
+    h+='<div style="display:flex;gap:8px">';
+    h+='<button class="btn btn-outline" onclick="showAddCardForm=false;render()">取消</button>';
+    h+='<button class="btn btn-primary" onclick="addCustomCard()">保存卡片</button>';
+    h+='</div></div>';
+  }else{
+    h+='<button class="btn btn-outline" style="width:100%" onclick="showAddCardForm=true;render()">'+ic('plus',18)+' 添加自定义卡片</button>';
+  }
+  h+='</div>';
+
+  return h;
+}
+function setCardFilter(f){cardFilter=f;cardIndex=0;cardAnswered=false;cardFlipped=false;render()}
+function answerCard(i){
+  var cards=getFilteredCards();
+  if(cardIndex>=cards.length)return;
+  var card=cards[cardIndex];
+  cardSelectedOption=i;
+  cardAnswered=true;
+  card.reviewCount=(card.reviewCount||0)+1;
+  if(i===card.answerIndex && !card.mastered){
+  }
+  save();
+  render();
+}
+function flipCard(){
+  cardFlipped=!cardFlipped;
+  if(cardFlipped){
+    var cards=getFilteredCards();
+    if(cardIndex<cards.length){
+      cards[cardIndex].reviewCount=(cards[cardIndex].reviewCount||0)+1;
+      save();
+    }
+  }
+  render();
+}
+function nextCard(){
+  var cards=getFilteredCards();
+  if(cardIndex<cards.length-1){cardIndex++;cardAnswered=false;cardSelectedOption=-1;cardFlipped=false;render()}
+}
+function prevCard(){
+  if(cardIndex>0){cardIndex--;cardAnswered=false;cardSelectedOption=-1;cardFlipped=false;render()}
+}
+function markMastered(){
+  var cards=getFilteredCards();
+  if(cardIndex<cards.length){
+    cards[cardIndex].mastered=true;
+    save();
+    showToast('标记掌握！');
+    render();
+  }
+}
+function shuffleCards(){
+  // Fisher-Yates shuffle
+  for(var i=state.cards.length-1;i>0;i--){
+    var j=Math.floor(Math.random()*(i+1));
+    var temp=state.cards[i];state.cards[i]=state.cards[j];state.cards[j]=temp;
+  }
+  cardIndex=0;cardAnswered=false;cardSelectedOption=-1;cardFlipped=false;
+  save();
+  render();
+}
+function addCustomCard(){
+  var s=document.getElementById('newCardSubject').value;
+  var f=document.getElementById('newCardFront').value.trim();
+  var b=document.getElementById('newCardBack').value.trim();
+  if(!f||!b){alert('请填写正面和背面内容');return}
+  state.cards.push({id:'c'+Date.now(),subject:s,front:f,back:b,options:null,answerIndex:-1,mastered:false,reviewCount:0});
+  save();
+  showAddCardForm=false;
+  cardFilter=s;
+  cardIndex=state.cards.filter(function(c){return c.subject===s}).length-1;
+  cardAnswered=false;cardFlipped=false;
+  render();
+  showToast('卡片已添加');
+}
+
+
+/* ========== Focus timer ========== */
+function startFocus(){
+  if(focusTimer.running)return;
+  focusTimer.running=true;
+  focusTimer.intervalId=setInterval(function(){
+    focusTimer.remaining--;
+    updateTimerDisplay();
+    if(focusTimer.remaining<=0){
+      clearInterval(focusTimer.intervalId);
+      focusTimer.running=false;
+      focusTimer.remaining=25*60;
+      var t=todayStr();
+      state.checkin.studyTime[t]=(state.checkin.studyTime[t]||0)+25;
+      save();
+      showToast('专注完成！学习时长已记录');
+      render();
+    }
+  },1000);
+  render();
+}
+function pauseFocus(){
+  if(focusTimer.intervalId){clearInterval(focusTimer.intervalId);focusTimer.intervalId=null}
+  focusTimer.running=false;
+  render();
+}
+function resetFocus(){
+  if(focusTimer.intervalId){clearInterval(focusTimer.intervalId);focusTimer.intervalId=null}
+  focusTimer.running=false;
+  focusTimer.remaining=25*60;
+  render();
+}
+function updateTimerDisplay(){
+  var el=document.getElementById('timerDisplay');
+  if(el){
+    var m=Math.floor(focusTimer.remaining/60);
+    var s=focusTimer.remaining%60;
+    el.textContent=pad(m)+':'+pad(s);
+  }
+}
+
+function getTaskCountForDate(d){
+  var n=0;
+  SUBJECTS.forEach(function(s){
+    n+=state.tasks[s].filter(function(t){return t.done&&(t.doneAt||'').startsWith(d)}).length;
+  });
+  return n;
+}
+
+/* ========== Weekly view ========== */
+function renderWeekly(){
+  var h='';
+  h+='<div class="page-header"><h1>周复盘</h1><p>查看本周学习情况和任务完成率</p></div>';
+
+  // Summary stats
+  var last7=getLast7Days();
+  var totalTasks=0,totalStudy=0;
+  last7.forEach(function(d){
+    totalTasks+=getTaskCountForDate(d);
+    totalStudy+=state.checkin.studyTime[d]||0;
+  });
+  h+='<div class="stat-grid">';
+  h+='<div class="stat-card teal"><div class="stat-icon">'+ic('check',20)+'</div><div class="stat-value">'+totalTasks+'</div><div class="stat-label">本周完成任务</div></div>';
+  h+='<div class="stat-card blue"><div class="stat-icon">'+ic('clock',20)+'</div><div class="stat-value">'+totalStudy+'</div><div class="stat-label">本周学习时长(分)</div></div>';
+  var masteredCount=state.cards.filter(function(c){return c.mastered}).length;
+  h+='<div class="stat-card amber"><div class="stat-icon">'+ic('cards',20)+'</div><div class="stat-value">'+masteredCount+'/'+state.cards.length+'</div><div class="stat-label">已掌握卡片</div></div>';
+  h+='</div>';
+
+  // Calendar week
+  h+='<div class="chart-container"><h3>本周日历</h3>';
+  h+='<div class="calendar-week">';
+  last7.forEach(function(d){
+    var tasks=getTaskCountForDate(d);
+    var study=state.checkin.studyTime[d]||0;
+    var hasActivity=tasks>0||study>0;
+    var cls='cal-day';
+    if(hasActivity)cls+=' has-activity';
+    if(d===todayStr())cls+=' today';
+    h+='<div class="'+cls+'"><div class="cal-dow">'+dayName(d)+'</div><div class="cal-date">'+parseInt(d.substring(8,10))+'</div><div class="cal-info">'+(tasks>0?tasks+'任务':'')+(study>0?(tasks>0?' ':'')+study+'分':'')+'</div></div>';
+  });
+  h+='</div></div>';
+
+  // Bar chart - tasks completed per day
+  h+='<div class="chart-container"><h3>每日任务完成量</h3>';
+  h+=drawBarChart(last7,function(d){
+    return getTaskCountForDate(d);
+  },'#14b8a6');
+  h+='</div>';
+
+  // Bar chart - study time per day
+  h+='<div class="chart-container"><h3>每日学习时长（分钟）</h3>';
+  h+=drawBarChart(last7,function(d){
+    return state.checkin.studyTime[d]||0;
+  },'#3b82f6');
+  h+='</div>';
+
+  // Subject breakdown
+  h+='<div class="chart-container"><h3>各科任务完成统计</h3>';
+  SUBJECTS.forEach(function(s){
+    var todayTasks=state.tasks[s].filter(function(t){return t.date===todayStr()});
+    var doneTasks=todayTasks.filter(function(t){return t.done});
+    var pct=todayTasks.length>0?Math.round(doneTasks.length/todayTasks.length*100):0;
+    h+='<div class="subject-progress" onclick="switchSubject(\''+s+'\')">';
+    h+='<div class="sp-icon" style="background:'+SUBJECT_COLORS[s]+'">'+SUBJECT_NAMES[s].charAt(0)+'</div>';
+    h+='<div class="sp-info"><div class="sp-name">'+SUBJECT_NAMES[s]+'</div>';
+    h+='<div class="sp-bar"><div class="sp-fill" style="width:'+pct+'%;background:'+SUBJECT_COLORS[s]+'"></div></div></div>';
+    h+='<div class="sp-pct">'+doneTasks.length+'/'+todayTasks.length+'</div></div>';
+  });
+  h+='</div>';
+
+  return h;
+}
+function drawBarChart(days,valueFn,color){
+  var data=days.map(function(d){return {day:d,val:valueFn(d)}});
+  var maxVal=Math.max.apply(Math,data.map(function(d){return d.val}).concat(5));
+  var barW=36,gap=16,chartH=140,padBottom=24;
+  var totalW=data.length*(barW+gap)+gap;
+  var bars='';
+  data.forEach(function(d,i){
+    var bh=d.val>0?Math.max(2,(d.val/maxVal)*(chartH-padBottom)):2;
+    var x=gap+i*(barW+gap);
+    var y=chartH-padBottom-bh;
+    var fillColor=d.val>0?color:'#e5e7eb';
+    bars+='<rect x="'+x+'" y="'+y+'" width="'+barW+'" height="'+bh+'" rx="5" fill="'+fillColor+'"/>';
+    bars+='<text x="'+(x+barW/2)+'" y="'+(chartH-8)+'" text-anchor="middle" font-size="11" fill="#9ca3af" font-family="sans-serif">'+dayName(d.day).substring(1)+'</text>';
+    if(d.val>0){
+      bars+='<text x="'+(x+barW/2)+'" y="'+(y-4)+'" text-anchor="middle" font-size="12" fill="'+color+'" font-weight="bold" font-family="sans-serif">'+d.val+'</text>';
+    }
+  });
+  return '<svg viewBox="0 0 '+totalW+' '+chartH+'" width="100%" style="max-width:'+totalW+'px;display:block;margin:0 auto">'+bars+'</svg>';
+}
+
+/* ========== Export/Import/Clear ========== */
+function exportData(){
+  var data={state:state,exportDate:new Date().toISOString(),version:2};
+  var blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');
+  a.href=url;
+  a.download='复习工作台备份_'+todayStr()+'.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('已导出备份文件');
+}
+function importData(file){
+  var reader=new FileReader();
+  reader.onload=function(e){
+    try{
+      var data=JSON.parse(e.target.result);
+      if(data.state){state=data.state}
+      else if(data.tasks){state=data}
+      save();
+      rolloverOverdue();
+      render();
+      showToast('导入成功！');
+    }catch(err){alert('导入失败：文件格式错误')}
+  };
+  reader.readAsText(file);
+}
+function showClearModal(){
+  var overlay=document.getElementById('modalOverlay');
+  overlay.innerHTML='<div class="modal"><h3>清空所有数据</h3><p>将清空所有任务、卡片、积分和打卡记录，此操作不可撤销。建议先导出备份。</p><div style="margin:12px 0"><button class="btn btn-outline" style="width:100%;margin-bottom:8px" onclick="clearSampleOnly()">仅清空示例数据</button></div><div class="modal-btns"><button class="btn btn-outline" onclick="closeModal()">取消</button><button class="btn btn-danger" onclick="clearAll()">确认清空</button></div></div>';
+  overlay.className='modal-overlay show';
+}
+function closeModal(){document.getElementById('modalOverlay').className='modal-overlay';document.getElementById('modalOverlay').innerHTML=''}
+function clearSampleOnly(){
+  SUBJECTS.forEach(function(s){state.tasks[s]=state.tasks[s].filter(function(t){return !t.isSample})});
+  state.cards=state.cards.filter(function(c){return !c.isSample});
+  state.rewards=state.rewards.filter(function(r){return !r.isSample});
+  save();
+  closeModal();
+  render();
+  showToast('示例数据已清空');
+}
+function clearAll(){
+  localStorage.removeItem(STORE_KEY+'state');
+  state={tasks:{history:[],geography:[],biology:[],politics:[]},cards:[],points:{total:0,log:[]},rewards:[],checkin:{dates:[],studyTime:{}}};
+  closeModal();
+  render();
+  showToast('所有数据已清空');
+}
+
+/* ========== Event listeners ========== */
+document.getElementById('importFile').addEventListener('change',function(e){
+  if(e.target.files[0])importData(e.target.files[0]);
+  e.target.value='';
+});
+document.getElementById('modalOverlay').addEventListener('click',function(e){
+  if(e.target===this)closeModal();
+});
+
+/* ========== Init ========== */
+function init(){
+  if(!load()){
+    initSampleData();
+  }
+  rolloverOverdue();
+  render();
+}
+init();
+</script>
+</body>
+</html>

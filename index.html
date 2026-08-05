@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>学习工作台</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:linear-gradient(135deg,#f0fdfa 0%,#eff6ff 100%);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.container{max-width:600px;width:100%}
+.header{text-align:center;margin-bottom:32px}
+.header h1{font-size:26px;font-weight:800;color:#0f766e;margin-bottom:6px}
+.header p{color:#6b7280;font-size:15px}
+.cards{display:grid;gap:16px}
+.card{display:flex;align-items:center;gap:16px;background:#fff;border-radius:16px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.06);text-decoration:none;color:inherit;transition:transform .15s,box-shadow .15s}
+.card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.1)}
+.card-icon{width:56px;height:56px;border-radius:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.card-icon.teal{background:#ccfbf1;color:#0d9488}
+.card-icon.blue{background:#dbeafe;color:#2563eb}
+.card-body h2{font-size:18px;font-weight:700;color:#111827;margin-bottom:4px}
+.card-body p{font-size:14px;color:#6b7280}
+.card-arrow{color:#9ca3af;flex-shrink:0}
+.footer{text-align:center;margin-top:32px;color:#9ca3af;font-size:13px}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>学习工作台</h1>
+    <p>选择要进入的学习模块</p>
+  </div>
+  <div class="cards">
+    <a class="card" href="english.html">
+      <div class="card-icon teal">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+      </div>
+      <div class="card-body">
+        <h2>英语学习台</h2>
+        <p>五四制外研版 · 360词18组 · 听写/填空/组词</p>
+      </div>
+      <div class="card-arrow">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+    </a>
+    <a class="card" href="review.html">
+      <div class="card-icon blue">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      </div>
+      <div class="card-body">
+        <h2>小四门复习台</h2>
+        <p>历史/地理/生物/政治 · 任务管理/知识卡片/周复盘</p>
+      </div>
+      <div class="card-arrow">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+    </a>
+  </div>
+  <div class="footer">数据保存在本地浏览器 · 建议定期导出备份</div>
+</div>
+</body>
+</html>
