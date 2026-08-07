@@ -93,19 +93,24 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica N
 .sub-tab.active{border-color:var(--teal-500);background:var(--teal-50);color:var(--teal-700)}
 
 /* ===== Task list ===== */
-.task-input-row{display:flex;gap:8px;margin-bottom:16px}
+.task-input-row{display:flex;gap:8px;margin-bottom:8px}
 .task-input-row input[type="text"]{flex:1;padding:12px 14px;border:2px solid var(--gray-200);border-radius:10px;font-size:16px;font-family:inherit;outline:none;transition:border .15s}
 .task-input-row input[type="text"]:focus{border-color:var(--teal-500)}
 .task-input-row input[type="date"]{padding:12px 10px;border:2px solid var(--gray-200);border-radius:10px;font-size:14px;font-family:inherit;outline:none}
-.task-item{display:flex;align-items:center;gap:12px;padding:14px;border-radius:10px;background:var(--gray-50);margin-bottom:8px;transition:all .15s}
-.task-item.done{opacity:.5}
+.task-answer-input{width:100%;padding:12px 14px;border:2px solid var(--gray-200);border-radius:10px;font-size:16px;font-family:inherit;outline:none;transition:border .15s;margin-bottom:8px;resize:vertical;min-height:50px}
+.task-answer-input:focus{border-color:var(--teal-500)}
+.task-item{padding:14px;border-radius:10px;background:var(--gray-50);margin-bottom:10px;transition:all .15s}
+.task-item.done{opacity:.55}
 .task-item.done .task-text{text-decoration:line-through}
+.task-item-header{display:flex;align-items:center;gap:12px}
 .task-checkbox{width:24px;height:24px;border-radius:6px;border:2px solid var(--gray-300);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s;background:#fff}
 .task-checkbox.checked{background:var(--green-500);border-color:var(--green-500);color:#fff}
-.task-text{flex:1;font-size:15px}
+.task-text{flex:1;font-size:15px;font-weight:500}
 .task-date{font-size:12px;color:var(--gray-400);flex-shrink:0}
 .task-delete{background:none;border:none;color:var(--gray-400);cursor:pointer;padding:4px;flex-shrink:0}
 .task-delete:hover{color:var(--red-500)}
+.task-answer-box{margin-top:10px;padding:12px 14px;background:var(--teal-50);border-radius:8px;border-left:3px solid var(--teal-500);font-size:14px;color:var(--gray-700);line-height:1.7}
+.task-answer-label{font-size:12px;font-weight:700;color:var(--teal-600);margin-bottom:4px;display:flex;align-items:center;gap:4px}
 
 /* ===== Buttons ===== */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:12px 20px;border-radius:10px;border:none;font-size:15px;font-weight:600;cursor:pointer;transition:all .15s;font-family:inherit;min-height:44px}
@@ -139,9 +144,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica N
 .filter-btn.active{border-color:var(--teal-500);background:var(--teal-50);color:var(--teal-700)}
 .review-card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow-lg);padding:0;margin-bottom:16px;overflow:hidden}
 .review-card-front{padding:28px 24px;text-align:center}
-.review-card-front .rc-subject{font-size:13px;font-weight:600;margin-bottom:8px}
+.review-card-front .rc-subject{font-size:13px;font-weight:600;margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:8px}
 .review-card-front .rc-question{font-size:20px;font-weight:700;line-height:1.5;color:var(--gray-900);margin-bottom:20px}
 .review-card-back{padding:0 24px 24px;text-align:center}
+.rc-type-tag{font-size:11px;padding:2px 8px;border-radius:6px;font-weight:600}
+.rc-type-tag.choice{background:var(--blue-50);color:var(--blue-500)}
+.rc-type-tag.fill{background:var(--purple-50);color:var(--purple-500)}
 .rc-options{display:grid;gap:10px;margin-top:8px}
 .rc-option{display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:10px;border:2px solid var(--gray-200);background:#fff;font-size:16px;font-weight:500;cursor:pointer;transition:all .15s;text-align:left;font-family:inherit;color:var(--gray-700)}
 .rc-option:hover{border-color:var(--teal-400);background:var(--teal-50)}
@@ -152,40 +160,25 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica N
 .rc-option.wrong .rc-letter{background:var(--red-500);color:#fff}
 .rc-option.disabled{cursor:default;opacity:.6}
 .rc-option.disabled:hover{border-color:var(--gray-200);background:#fff}
+.rc-fill-area{margin-top:8px}
+.rc-fill-input{width:100%;padding:14px 16px;border:2px solid var(--gray-200);border-radius:10px;font-size:18px;font-family:inherit;outline:none;text-align:center;transition:border .15s}
+.rc-fill-input:focus{border-color:var(--teal-500)}
+.rc-fill-input.correct{border-color:var(--green-500);background:#f0fdf4;color:var(--green-600)}
+.rc-fill-input.wrong{border-color:var(--red-500);background:var(--red-50);color:var(--red-500)}
 .rc-explain{margin-top:14px;padding:14px;border-radius:10px;background:var(--teal-50);font-size:14px;color:var(--gray-700);text-align:left;line-height:1.7}
-.rc-explain .rc-answer-tag{font-weight:700;color:var(--teal-600);margin-bottom:4px}
+.rc-explain .rc-answer-tag{font-weight:700;margin-bottom:4px}
+.rc-explain .rc-answer-tag.correct-tag{color:var(--green-600)}
+.rc-explain .rc-answer-tag.wrong-tag{color:var(--red-500)}
 .rc-flip-btn{padding:14px 20px;border-radius:10px;border:2px dashed var(--teal-400);background:var(--teal-50);color:var(--teal-600);font-size:16px;font-weight:600;cursor:pointer;width:100%;font-family:inherit;transition:all .15s}
 .rc-flip-btn:hover{background:var(--teal-100)}
 .rc-nav{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:8px}
 .rc-nav-info{font-size:14px;color:var(--gray-500);font-weight:600}
-
-/* ===== Points ===== */
-.points-display{text-align:center;padding:24px;margin-bottom:16px}
-.points-display .pd-value{font-size:48px;font-weight:800;color:var(--amber-500);line-height:1}
-.points-display .pd-label{font-size:15px;color:var(--gray-500);margin-top:4px}
-.points-display .pd-icon{width:56px;height:56px;border-radius:14px;background:var(--amber-50);color:var(--amber-500);display:flex;align-items:center;justify-content:center;margin:0 auto 8px}
 
 /* ===== Focus timer ===== */
 .timer-card{text-align:center;padding:24px}
 .timer-display{font-size:56px;font-weight:800;color:var(--teal-600);font-variant-numeric:tabular-nums;letter-spacing:2px;margin:8px 0}
 .timer-label{font-size:14px;color:var(--gray-500)}
 .timer-btns{display:flex;gap:8px;justify-content:center;margin-top:16px}
-
-/* ===== Rewards ===== */
-.reward-item{display:flex;align-items:center;gap:12px;padding:14px;border-radius:10px;background:var(--gray-50);margin-bottom:8px}
-.reward-item .rw-icon{width:36px;height:36px;border-radius:8px;background:var(--amber-50);color:var(--amber-500);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.reward-item .rw-info{flex:1}
-.reward-item .rw-name{font-size:15px;font-weight:600}
-.reward-item .rw-cost{font-size:13px;color:var(--amber-500);font-weight:600}
-
-/* ===== Points log ===== */
-.log-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--gray-100);font-size:14px}
-.log-item:last-child{border-bottom:none}
-.log-item .log-desc{flex:1;color:var(--gray-700)}
-.log-item .log-amount{font-weight:700}
-.log-item .log-amount.plus{color:var(--green-500)}
-.log-item .log-amount.minus{color:var(--red-500)}
-.log-item .log-time{font-size:12px;color:var(--gray-400)}
 
 /* ===== Weekly chart ===== */
 .chart-container{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;margin-bottom:16px}
@@ -264,8 +257,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica N
 
 <div class="topbar">
   <div class="topbar-title">七年级复习台</div>
-  <div class="topbar-right">
-  </div>
+  <div class="topbar-right"></div>
 </div>
 
 <div class="app">
@@ -304,59 +296,85 @@ var SUBJECT_NAMES={history:'历史',geography:'地理',biology:'生物',politics
 var SUBJECT_COLORS={history:'#f59e0b',geography:'#3b82f6',biology:'#22c55e',politics:'#8b5cf6'};
 var SUBJECT_TAGS={history:'tag-history',geography:'tag-geography',biology:'tag-biology',politics:'tag-politics'};
 
-/* ========== Pre-populated cards ========== */
+/* ========== Pre-populated cards (choice + fill mixed) ========== */
 var SAMPLE_CARDS=[
-{id:1,subject:'history',front:'我国第一个王朝是？',back:'夏朝（约公元前2070年，禹建立，世袭制取代禅让制）',options:['夏','商','周','秦'],answerIndex:0,mastered:false,reviewCount:0,isSample:true},
-{id:2,subject:'history',front:'秦朝统一六国的时间是？',back:'公元前221年，秦始皇嬴政统一六国，建立中国历史上第一个统一的多民族封建国家',options:['公元前221年','公元前206年','公元221年','公元前230年'],answerIndex:0,mastered:false,reviewCount:0,isSample:true},
-{id:3,subject:'history',front:'"文景之治"出现在哪个朝代？',back:'西汉，汉文帝和汉景帝时期，提倡节俭，减轻赋税，出现治世局面',options:['秦朝','西汉','东汉','唐朝'],answerIndex:1,mastered:false,reviewCount:0,isSample:true},
-{id:4,subject:'history',front:'丝绸之路的开拓者是？',back:'张骞，西汉时期两次出使西域，开辟了东西方交流的通道',options:['张骞','班超','玄奘','郑和'],answerIndex:0,mastered:false,reviewCount:0,isSample:true},
-{id:5,subject:'history',front:'唐朝的开国皇帝是？',back:'李渊（唐高祖），618年建立唐朝，定都长安',options:['李世民','李渊','李治','武则天'],answerIndex:1,mastered:false,reviewCount:0,isSample:true},
-{id:6,subject:'history',front:'北宋的建立者是？',back:'赵匡胤（宋太祖），960年陈桥兵变，黄袍加身建立北宋',options:['赵匡胤','赵光义','赵构','赵普'],answerIndex:0,mastered:false,reviewCount:0,isSample:true},
-{id:7,subject:'history',front:'郑和下西洋始于哪个朝代？',back:'明朝，1405年至1433年郑和七次下西洋，最远到达非洲东海岸',options:['唐朝','宋朝','元朝','明朝'],answerIndex:3,mastered:false,reviewCount:0,isSample:true},
-{id:8,subject:'history',front:'"百家争鸣"发生在哪个时期？',back:'春秋战国时期，儒、道、法、墨等学派相互争鸣，思想繁荣',options:['夏商时期','西周时期','春秋战国时期','秦汉时期'],answerIndex:2,mastered:false,reviewCount:0,isSample:true},
-{id:9,subject:'history',front:'火药开始用于军事是在哪个朝代？',back:'唐朝末年，火药开始用于军事，宋元时期广泛应用',options:['秦朝','汉朝','唐朝','宋朝'],answerIndex:2,mastered:false,reviewCount:0,isSample:true},
-{id:10,subject:'history',front:'科举制正式创立于哪个朝代？',back:'隋朝，隋炀帝设进士科，标志着科举制正式确立',options:['汉朝','隋朝','唐朝','宋朝'],answerIndex:1,mastered:false,reviewCount:0,isSample:true},
+/* --- History choice (10) --- */
+{id:1,subject:'history',type:'choice',front:'我国第一个王朝是？',back:'夏朝（约公元前2070年，禹建立，世袭制取代禅让制）',options:['夏','商','周','秦'],answerIndex:0,mastered:false,reviewCount:0,isSample:true},
+{id:2,subject:'history',type:'choice',front:'秦朝统一六国的时间是？',back:'公元前221年，秦始皇嬴政统一六国，建立中国历史上第一个统一的多民族封建国家',options:['公元前221年','公元前206年','公元221年','公元前230年'],answerIndex:0,mastered:false,reviewCount:0,isSample:true},
+{id:3,subject:'history',type:'choice',front:'"文景之治"出现在哪个朝代？',back:'西汉，汉文帝和汉景帝时期，提倡节俭，减轻赋税，出现治世局面',options:['秦朝','西汉','东汉','唐朝'],answerIndex:1,mastered:false,reviewCount:0,isSample:true},
+{id:4,subject:'history',type:'choice',front:'丝绸之路的开拓者是？',back:'张骞，西汉时期两次出使西域，开辟了东西方交流的通道',options:['张骞','班超','玄奘','郑和'],answerIndex:0,mastered:false,reviewCount:0,isSample:true},
+{id:5,subject:'history',type:'choice',front:'唐朝的开国皇帝是？',back:'李渊（唐高祖），618年建立唐朝，定都长安',options:['李世民','李渊','李治','武则天'],answerIndex:1,mastered:false,reviewCount:0,isSample:true},
+{id:6,subject:'history',type:'choice',front:'北宋的建立者是？',back:'赵匡胤（宋太祖），960年陈桥兵变，黄袍加身建立北宋',options:['赵匡胤','赵光义','赵构','赵普'],answerIndex:0,mastered:false,reviewCount:0,isSample:true},
+{id:7,subject:'history',type:'choice',front:'郑和下西洋始于哪个朝代？',back:'明朝，1405年至1433年郑和七次下西洋，最远到达非洲东海岸',options:['唐朝','宋朝','元朝','明朝'],answerIndex:3,mastered:false,reviewCount:0,isSample:true},
+{id:8,subject:'history',type:'choice',front:'"百家争鸣"发生在哪个时期？',back:'春秋战国时期，儒、道、法、墨等学派相互争鸣，思想繁荣',options:['夏商时期','西周时期','春秋战国时期','秦汉时期'],answerIndex:2,mastered:false,reviewCount:0,isSample:true},
+{id:9,subject:'history',type:'choice',front:'火药开始用于军事是在哪个朝代？',back:'唐朝末年，火药开始用于军事，宋元时期广泛应用',options:['秦朝','汉朝','唐朝','宋朝'],answerIndex:2,mastered:false,reviewCount:0,isSample:true},
+{id:10,subject:'history',type:'choice',front:'科举制正式创立于哪个朝代？',back:'隋朝，隋炀帝设进士科，标志着科举制正式确立',options:['汉朝','隋朝','唐朝','宋朝'],answerIndex:1,mastered:false,reviewCount:0,isSample:true},
+/* --- History fill (5) --- */
+{id:11,subject:'history',type:'fill',front:'夏朝的建立者是____，他建立了中国历史上第一个王朝。',back:'禹（约公元前2070年，禹建立夏朝，从此世袭制取代了禅让制）',fillAnswer:'禹',mastered:false,reviewCount:0,isSample:true},
+{id:12,subject:'history',type:'fill',front:'秦始皇统一六国后，规定以____作为全国统一的货币。',back:'圆形方孔钱（秦朝统一货币为圆形方孔半两钱，同时统一了度量衡和文字）',fillAnswer:'圆形方孔钱',mastered:false,reviewCount:0,isSample:true},
+{id:13,subject:'history',type:'fill',front:'西汉时期，____两次出使西域，开辟了丝绸之路。',back:'张骞（张骞通西域后，汉朝与西域各国建立了友好关系，开辟了东西方交流的重要通道）',fillAnswer:'张骞',mastered:false,reviewCount:0,isSample:true},
+{id:14,subject:'history',type:'fill',front:'唐朝都城____是当时世界上最大最繁华的城市之一。',back:'长安（唐长安城是当时世界上人口最多、最繁华的国际大都市，人口超过百万）',fillAnswer:'长安',mastered:false,reviewCount:0,isSample:true},
+{id:15,subject:'history',type:'fill',front:'活字印刷术是北宋时期____发明的。',back:'毕昇（毕昇用胶泥制活字，比欧洲早约四百年，是中国古代四大发明之一）',fillAnswer:'毕昇',mastered:false,reviewCount:0,isSample:true},
 
-{id:11,subject:'geography',front:'地球的自转方向是？',back:'自西向东，周期约24小时，产生昼夜交替现象',options:['自西向东','自东向西','自南向北','自北向南'],answerIndex:0,mastered:false,reviewCount:0,isSample:true},
-{id:12,subject:'geography',front:'世界上面积最大的洋是？',back:'太平洋，面积约1.65亿平方千米，占海洋总面积的一半',options:['大西洋','太平洋','印度洋','北冰洋'],answerIndex:1,mastered:false,reviewCount:0,isSample:true},
-{id:13,subject:'geography',front:'亚洲与非洲的分界线是？',back:'苏伊士运河，连接地中海与红海，是重要的国际航运通道',options:['苏伊士运河','巴拿马运河','白令海峡','土耳其海峡'],answerIndex:0,mastered:false,reviewCount:0,isSample:true},
-{id:14,subject:'geography',front:'热带雨林气候主要分布在？',back:'赤道附近，如南美洲亚马孙平原、非洲刚果盆地',options:['赤道附近','回归线附近','极地附近','温带地区'],answerIndex:0,mastered:false,reviewCount:0,isSample:true},
-{id:15,subject:'geography',front:'世界上面积最大的洲是？',back:'亚洲，面积约4400万平方千米，跨寒、温、热三带',options:['非洲','亚洲','北美洲','南极洲'],answerIndex:1,mastered:false,reviewCount:0,isSample:true},
-{id:16,subject:'geography',front:'地球上约71%的面积被什么覆盖？',back:'海洋，因此地球被称为"水球"',options:['陆地','海洋','冰川','沙漠'],answerIndex:1,mastered:false,reviewCount:0,isSample:true},
-{id:17,subject:'geography',front:'比例尺1:100000表示图上1cm代表实际多少？',back:'1千米，比例尺=图上距离/实际距离',options:['100米','1千米','10千米','100千米'],answerIndex:1,mastered:false,reviewCount:0,isSample:true},
-{id:18,subject:'geography',front:'世界人口最密集的地区主要在？',back:'中低纬度的沿海平原地区，气候适宜、交通便利',options:['极地地区','热带雨林地区','中低纬度沿海地区','高纬度地区'],answerIndex:2,mastered:false,reviewCount:0,isSample:true},
-{id:19,subject:'geography',front:'影响气候的主要因素不包括？',back:'人口密度，气候主要受纬度位置、海陆位置、地形等因素影响',options:['纬度位置','海陆位置','地形地势','人口密度'],answerIndex:3,mastered:false,reviewCount:0,isSample:true},
-{id:20,subject:'geography',front:'世界上使用人数最多的语言是？',back:'汉语，主要在中国及东南亚华人社区使用',options:['英语','汉语','西班牙语','阿拉伯语'],answerIndex:1,mastered:false,reviewCount:0,isSample:true},
+/* --- Geography choice (10) --- */
+{id:16,subject:'geography',type:'choice',front:'地球的自转方向是？',back:'自西向东，周期约24小时，产生昼夜交替现象',options:['自西向东','自东向西','自南向北','自北向南'],answerIndex:0,mastered:false,reviewCount:0,isSample:true},
+{id:17,subject:'geography',type:'choice',front:'世界上面积最大的洋是？',back:'太平洋，面积约1.65亿平方千米，占海洋总面积的一半',options:['大西洋','太平洋','印度洋','北冰洋'],answerIndex:1,mastered:false,reviewCount:0,isSample:true},
+{id:18,subject:'geography',type:'choice',front:'亚洲与非洲的分界线是？',back:'苏伊士运河，连接地中海与红海，是重要的国际航运通道',options:['苏伊士运河','巴拿马运河','白令海峡','土耳其海峡'],answerIndex:0,mastered:false,reviewCount:0,isSample:true},
+{id:19,subject:'geography',type:'choice',front:'热带雨林气候主要分布在？',back:'赤道附近，如南美洲亚马孙平原、非洲刚果盆地',options:['赤道附近','回归线附近','极地附近','温带地区'],answerIndex:0,mastered:false,reviewCount:0,isSample:true},
+{id:20,subject:'geography',type:'choice',front:'世界上面积最大的洲是？',back:'亚洲，面积约4400万平方千米，跨寒、温、热三带',options:['非洲','亚洲','北美洲','南极洲'],answerIndex:1,mastered:false,reviewCount:0,isSample:true},
+{id:21,subject:'geography',type:'choice',front:'地球上约71%的面积被什么覆盖？',back:'海洋，因此地球被称为"水球"',options:['陆地','海洋','冰川','沙漠'],answerIndex:1,mastered:false,reviewCount:0,isSample:true},
+{id:22,subject:'geography',type:'choice',front:'比例尺1:100000表示图上1cm代表实际多少？',back:'1千米，比例尺=图上距离/实际距离',options:['100米','1千米','10千米','100千米'],answerIndex:1,mastered:false,reviewCount:0,isSample:true},
+{id:23,subject:'geography',type:'choice',front:'世界人口最密集的地区主要在？',back:'中低纬度的沿海平原地区，气候适宜、交通便利',options:['极地地区','热带雨林地区','中低纬度沿海地区','高纬度地区'],answerIndex:2,mastered:false,reviewCount:0,isSample:true},
+{id:24,subject:'geography',type:'choice',front:'影响气候的主要因素不包括？',back:'人口密度，气候主要受纬度位置、海陆位置、地形等因素影响',options:['纬度位置','海陆位置','地形地势','人口密度'],answerIndex:3,mastered:false,reviewCount:0,isSample:true},
+{id:25,subject:'geography',type:'choice',front:'世界上使用人数最多的语言是？',back:'汉语，主要在中国及东南亚华人社区使用',options:['英语','汉语','西班牙语','阿拉伯语'],answerIndex:1,mastered:false,reviewCount:0,isSample:true},
+/* --- Geography fill (5) --- */
+{id:26,subject:'geography',type:'fill',front:'地球自转一周约需____小时，产生了昼夜交替现象。',back:'24小时（地球自转方向为自西向东，自转一周约24小时，形成昼夜交替）',fillAnswer:'24',mastered:false,reviewCount:0,isSample:true},
+{id:27,subject:'geography',type:'fill',front:'世界上海拔最高的山峰是____，海拔8848.86米。',back:'珠穆朗玛峰（位于中国与尼泊尔边境，喜马拉雅山脉主峰，2020年最新测量海拔8848.86米）',fillAnswer:'珠穆朗玛峰',mastered:false,reviewCount:0,isSample:true},
+{id:28,subject:'geography',type:'fill',front:'亚洲地势中间____、四周低，河流呈放射状流向周边海洋。',back:'高（亚洲中部有青藏高原、帕米尔高原，地势最高，河流向四周呈放射状奔流入海）',fillAnswer:'高',mastered:false,reviewCount:0,isSample:true},
+{id:29,subject:'geography',type:'fill',front:'北美洲和南美洲的分界线是____。',back:'巴拿马运河（巴拿马运河连接太平洋和大西洋，是南、北美洲的分界线，也是重要的国际航运通道）',fillAnswer:'巴拿马运河',mastered:false,reviewCount:0,isSample:true},
+{id:30,subject:'geography',type:'fill',front:'地图三要素包括比例尺、方向和____。',back:'图例（比例尺表示图上距离与实际距离的比，方向指示地理方位，图例是地图上各种符号的说明）',fillAnswer:'图例',mastered:false,reviewCount:0,isSample:true},
 
-{id:21,subject:'biology',front:'植物光合作用的场所是？',back:'叶绿体，利用光能将二氧化碳和水转化为有机物并释放氧气',options:['细胞核','叶绿体','线粒体','液泡'],answerIndex:1,mastered:false,reviewCount:0,isSample:true},
-{id:22,subject:'biology',front:'人体四大基本组织不包括？',back:'骨骼组织，四大基本组织为上皮组织、结缔组织、肌肉组织、神经组织',options:['上皮组织','结缔组织','肌肉组织','骨骼组织'],answerIndex:3,mastered:false,reviewCount:0,isSample:true},
-{id:23,subject:'biology',front:'根吸收水分和无机盐的主要部位是？',back:'成熟区（根毛区），根毛大大增加了吸收面积',options:['根冠','分生区','伸长区','成熟区'],answerIndex:3,mastered:false,reviewCount:0,isSample:true},
-{id:24,subject:'biology',front:'人体最大的器官是？',back:'皮肤，具有保护、排泄、调节体温和感受外界刺激等功能',options:['肝脏','皮肤','大脑','肺'],answerIndex:1,mastered:false,reviewCount:0,isSample:true},
-{id:25,subject:'biology',front:'血液中运输氧气的细胞是？',back:'红细胞，含有血红蛋白，能结合和运输氧气',options:['红细胞','白细胞','血小板','血浆'],answerIndex:0,mastered:false,reviewCount:0,isSample:true},
-{id:26,subject:'biology',front:'植物进行呼吸作用的场所是？',back:'线粒体，分解有机物释放能量，为生命活动提供动力',options:['叶绿体','线粒体','细胞核','液泡'],answerIndex:1,mastered:false,reviewCount:0,isSample:true},
-{id:27,subject:'biology',front:'体循环起始于哪个心脏腔室？',back:'左心室，将含氧丰富的动脉血泵向全身各处',options:['左心室','右心室','左心房','右心房'],answerIndex:0,mastered:false,reviewCount:0,isSample:true},
-{id:28,subject:'biology',front:'下列属于生物的是？',back:'病毒，生物具有生长、繁殖、新陈代谢等生命特征',options:['阳光','水','病毒','空气'],answerIndex:2,mastered:false,reviewCount:0,isSample:true},
-{id:29,subject:'biology',front:'细胞中控制物质进出的结构是？',back:'细胞膜，具有选择透过性，控制物质进出细胞',options:['细胞膜','细胞质','细胞核','细胞壁'],answerIndex:0,mastered:false,reviewCount:0,isSample:true},
-{id:30,subject:'biology',front:'被子植物的主要特征是？',back:'有果皮包被种子，种子不裸露，是植物界最高等的类群',options:['有种子无果皮','有果皮包被种子','无种子','有花无种子'],answerIndex:1,mastered:false,reviewCount:0,isSample:true},
+/* --- Biology choice (10) --- */
+{id:31,subject:'biology',type:'choice',front:'植物光合作用的场所是？',back:'叶绿体，利用光能将二氧化碳和水转化为有机物并释放氧气',options:['细胞核','叶绿体','线粒体','液泡'],answerIndex:1,mastered:false,reviewCount:0,isSample:true},
+{id:32,subject:'biology',type:'choice',front:'人体四大基本组织不包括？',back:'骨骼组织，四大基本组织为上皮组织、结缔组织、肌肉组织、神经组织',options:['上皮组织','结缔组织','肌肉组织','骨骼组织'],answerIndex:3,mastered:false,reviewCount:0,isSample:true},
+{id:33,subject:'biology',type:'choice',front:'根吸收水分和无机盐的主要部位是？',back:'成熟区（根毛区），根毛大大增加了吸收面积',options:['根冠','分生区','伸长区','成熟区'],answerIndex:3,mastered:false,reviewCount:0,isSample:true},
+{id:34,subject:'biology',type:'choice',front:'人体最大的器官是？',back:'皮肤，具有保护、排泄、调节体温和感受外界刺激等功能',options:['肝脏','皮肤','大脑','肺'],answerIndex:1,mastered:false,reviewCount:0,isSample:true},
+{id:35,subject:'biology',type:'choice',front:'血液中运输氧气的细胞是？',back:'红细胞，含有血红蛋白，能结合和运输氧气',options:['红细胞','白细胞','血小板','血浆'],answerIndex:0,mastered:false,reviewCount:0,isSample:true},
+{id:36,subject:'biology',type:'choice',front:'植物进行呼吸作用的场所是？',back:'线粒体，分解有机物释放能量，为生命活动提供动力',options:['叶绿体','线粒体','细胞核','液泡'],answerIndex:1,mastered:false,reviewCount:0,isSample:true},
+{id:37,subject:'biology',type:'choice',front:'体循环起始于哪个心脏腔室？',back:'左心室，将含氧丰富的动脉血泵向全身各处',options:['左心室','右心室','左心房','右心房'],answerIndex:0,mastered:false,reviewCount:0,isSample:true},
+{id:38,subject:'biology',type:'choice',front:'下列属于生物的是？',back:'病毒，生物具有生长、繁殖、新陈代谢等生命特征',options:['阳光','水','病毒','空气'],answerIndex:2,mastered:false,reviewCount:0,isSample:true},
+{id:39,subject:'biology',type:'choice',front:'细胞中控制物质进出的结构是？',back:'细胞膜，具有选择透过性，控制物质进出细胞',options:['细胞膜','细胞质','细胞核','细胞壁'],answerIndex:0,mastered:false,reviewCount:0,isSample:true},
+{id:40,subject:'biology',type:'choice',front:'被子植物的主要特征是？',back:'有果皮包被种子，种子不裸露，是植物界最高等的类群',options:['有种子无果皮','有果皮包被种子','无种子','有花无种子'],answerIndex:1,mastered:false,reviewCount:0,isSample:true},
+/* --- Biology fill (5) --- */
+{id:41,subject:'biology',type:'fill',front:'植物细胞中，____是进行光合作用的场所。',back:'叶绿体（叶绿体含有叶绿素，能利用光能将二氧化碳和水转化为有机物，同时释放氧气，是植物特有的细胞器）',fillAnswer:'叶绿体',mastered:false,reviewCount:0,isSample:true},
+{id:42,subject:'biology',type:'fill',front:'人体血液循环中，____将含氧丰富的动脉血从心脏泵向全身。',back:'左心室（左心室壁最厚，肌肉发达，收缩力最强，将动脉血泵入主动脉，输送到全身各处组织）',fillAnswer:'左心室',mastered:false,reviewCount:0,isSample:true},
+{id:43,subject:'biology',type:'fill',front:'植物根吸收水分和无机盐的主要部位是____区。',back:'成熟区（成熟区也叫根毛区，表皮细胞向外突起形成根毛，大大增加了与土壤的接触面积，是吸收水分和无机盐最活跃的区域）',fillAnswer:'成熟',mastered:false,reviewCount:0,isSample:true},
+{id:44,subject:'biology',type:'fill',front:'血液中能运输氧气的血细胞是____。',back:'红细胞（红细胞富含血红蛋白，血红蛋白在氧含量高的地方容易与氧结合，在氧含量低的地方容易与氧分离，从而运输氧气）',fillAnswer:'红细胞',mastered:false,reviewCount:0,isSample:true},
+{id:45,subject:'biology',type:'fill',front:'细胞中储存遗传信息的结构是____。',back:'细胞核（细胞核内有染色体，染色体上有DNA，DNA上有基因，基因储存着生物的遗传信息，控制着生物的遗传和变异）',fillAnswer:'细胞核',mastered:false,reviewCount:0,isSample:true},
 
-{id:31,subject:'politics',front:'青春期心理矛盾的正常应对方式是？',back:'主动沟通，向老师、家长或朋友寻求帮助',options:['封闭自己','主动沟通','逃避现实','网上发泄'],answerIndex:1,mastered:false,reviewCount:0,isSample:true},
-{id:32,subject:'politics',front:'"止于至善"出自哪部经典？',back:'《大学》，意为达到并保持最完善的境界',options:['《论语》','《大学》','《中庸》','《孟子》'],answerIndex:1,mastered:false,reviewCount:0,isSample:true},
-{id:33,subject:'politics',front:'下列属于良好学习习惯的是？',back:'制定计划，合理安排学习时间和内容，提高效率',options:['考前突击','制定计划','抄袭作业','边玩边学'],answerIndex:1,mastered:false,reviewCount:0,isSample:true},
-{id:34,subject:'politics',front:'法律最主要的特征是？',back:'由国家制定或认可，靠国家强制力保证实施',options:['由国家制定','道德约束','社会舆论','个人习惯'],answerIndex:0,mastered:false,reviewCount:0,isSample:true},
-{id:35,subject:'politics',front:'遇到校园欺凌应该？',back:'告诉老师和家长，寻求成人的帮助和保护',options:['忍气吞声','以暴制暴','告诉老师和家长','转学逃避'],answerIndex:2,mastered:false,reviewCount:0,isSample:true},
-{id:36,subject:'politics',front:'"行己有耻"的意思是？',back:'自己行事要有底线，知廉耻、有所不为',options:['做事要有耻辱感','自己行事要有底线','不要感到羞耻','做事要大胆'],answerIndex:1,mastered:false,reviewCount:0,isSample:true},
-{id:37,subject:'politics',front:'友谊的特质不包括？',back:'一成不变，友谊不是一成不变的，会随时间和环境变化',options:['亲密关系','平等尊重','一成不变','坦诚相待'],answerIndex:2,mastered:false,reviewCount:0,isSample:true},
-{id:38,subject:'politics',front:'下列属于正确生命观念的是？',back:'珍爱生命，认识到生命的宝贵和不可重复',options:['追求享乐','珍爱生命','漠视自然','挑战极限'],answerIndex:1,mastered:false,reviewCount:0,isSample:true},
-{id:39,subject:'politics',front:'集体生活的作用是？',back:'培养个性和社会性，在集体中发展和完善自我',options:['限制个人发展','培养个性和社会性','增加压力','没有意义'],answerIndex:1,mastered:false,reviewCount:0,isSample:true},
-{id:40,subject:'politics',front:'我国宪法规定国家的根本制度是？',back:'社会主义制度',options:['资本主义制度','社会主义制度','封建主义制度','共产主义制度'],answerIndex:1,mastered:false,reviewCount:0,isSample:true}
+/* --- Politics choice (10) --- */
+{id:46,subject:'politics',type:'choice',front:'青春期心理矛盾的正常应对方式是？',back:'主动沟通，向老师、家长或朋友寻求帮助',options:['封闭自己','主动沟通','逃避现实','网上发泄'],answerIndex:1,mastered:false,reviewCount:0,isSample:true},
+{id:47,subject:'politics',type:'choice',front:'"止于至善"出自哪部经典？',back:'《大学》，意为达到并保持最完善的境界',options:['《论语》','《大学》','《中庸》','《孟子》'],answerIndex:1,mastered:false,reviewCount:0,isSample:true},
+{id:48,subject:'politics',type:'choice',front:'下列属于良好学习习惯的是？',back:'制定计划，合理安排学习时间和内容，提高效率',options:['考前突击','制定计划','抄袭作业','边玩边学'],answerIndex:1,mastered:false,reviewCount:0,isSample:true},
+{id:49,subject:'politics',type:'choice',front:'法律最主要的特征是？',back:'由国家制定或认可，靠国家强制力保证实施',options:['由国家制定','道德约束','社会舆论','个人习惯'],answerIndex:0,mastered:false,reviewCount:0,isSample:true},
+{id:50,subject:'politics',type:'choice',front:'遇到校园欺凌应该？',back:'告诉老师和家长，寻求成人的帮助和保护',options:['忍气吞声','以暴制暴','告诉老师和家长','转学逃避'],answerIndex:2,mastered:false,reviewCount:0,isSample:true},
+{id:51,subject:'politics',type:'choice',front:'"行己有耻"的意思是？',back:'自己行事要有底线，知廉耻、有所不为',options:['做事要有耻辱感','自己行事要有底线','不要感到羞耻','做事要大胆'],answerIndex:1,mastered:false,reviewCount:0,isSample:true},
+{id:52,subject:'politics',type:'choice',front:'友谊的特质不包括？',back:'一成不变，友谊不是一成不变的，会随时间和环境变化',options:['亲密关系','平等尊重','一成不变','坦诚相待'],answerIndex:2,mastered:false,reviewCount:0,isSample:true},
+{id:53,subject:'politics',type:'choice',front:'下列属于正确生命观念的是？',back:'珍爱生命，认识到生命的宝贵和不可重复',options:['追求享乐','珍爱生命','漠视自然','挑战极限'],answerIndex:1,mastered:false,reviewCount:0,isSample:true},
+{id:54,subject:'politics',type:'choice',front:'集体生活的作用是？',back:'培养个性和社会性，在集体中发展和完善自我',options:['限制个人发展','培养个性和社会性','增加压力','没有意义'],answerIndex:1,mastered:false,reviewCount:0,isSample:true},
+{id:55,subject:'politics',type:'choice',front:'我国宪法规定国家的根本制度是？',back:'社会主义制度',options:['资本主义制度','社会主义制度','封建主义制度','共产主义制度'],answerIndex:1,mastered:false,reviewCount:0,isSample:true},
+/* --- Politics fill (5) --- */
+{id:56,subject:'politics',type:'fill',front:'法律最主要的特征是由____制定或认可。',back:'国家（法律由国家制定或认可，靠国家强制力保证实施，对全体社会成员具有普遍约束力，这是法律区别于道德等行为规范的最主要特征）',fillAnswer:'国家',mastered:false,reviewCount:0,isSample:true},
+{id:57,subject:'politics',type:'fill',front:'"止于至善"出自《____》，意为达到并保持最完善的境界。',back:'大学（《大学》是《礼记》中的一篇，提出"大学之道，在明明德，在亲民，在止于至善"，强调不断自我完善）',fillAnswer:'大学',mastered:false,reviewCount:0,isSample:true},
+{id:58,subject:'politics',type:'fill',front:'遇到校园欺凌时，应该及时告诉____和家长，寻求帮助。',back:'老师（遇到校园欺凌不能忍气吞声或以暴制暴，应及时告诉老师和家长，必要时报警，寻求成人的帮助和保护是正确的做法）',fillAnswer:'老师',mastered:false,reviewCount:0,isSample:true},
+{id:59,subject:'politics',type:'fill',front:'我国宪法规定，国家的根本制度是____制度。',back:'社会主义（我国宪法第一条明确规定：中华人民共和国是工人阶级领导的、以工农联盟为基础的人民民主专政的社会主义国家，社会主义制度是根本制度）',fillAnswer:'社会主义',mastered:false,reviewCount:0,isSample:true},
+{id:60,subject:'politics',type:'fill',front:'青春期面对心理矛盾时，最好的方式是主动与____、家长或朋友沟通。',back:'老师（青春期会出现各种心理矛盾和困惑，如独立性与依赖性的矛盾等，主动沟通、寻求帮助是积极有效的应对方式）',fillAnswer:'老师',mastered:false,reviewCount:0,isSample:true}
 ];
 
 /* ========== State ========== */
 var state={
   tasks:{history:[],geography:[],biology:[],politics:[]},
   cards:[],
-  points:{total:0,log:[]},
-  rewards:[],
   checkin:{dates:[],studyTime:{}}
 };
 var currentView='home';
@@ -366,6 +384,7 @@ var cardIndex=0;
 var cardAnswered=false;
 var cardSelectedOption=-1;
 var cardFlipped=false;
+var cardFillInput='';
 var focusTimer={running:false,remaining:25*60,intervalId:null};
 var showAddCardForm=false;
 
@@ -394,11 +413,11 @@ function ic(name,size){
     left:'<polyline points="15 18 9 12 15 6"/>',
     right:'<polyline points="9 18 15 12 9 6"/>',
     shuffle:'<polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/>',
-    gift:'<polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>',
     trash:'<polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>',
     clock:'<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
     flame:'<path d="M12 2c0 4-4 6-4 10a4 4 0 0 0 8 0c0-2-1-3-1-5 0 0 3 2 3 5a6 6 0 0 1-12 0c0-5 6-6 6-10z"/>',
-    target:'<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>'
+    target:'<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>',
+    book:'<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>'
   };
   return '<svg width="'+size+'" height="'+size+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+(p[name]||'')+'</svg>';
 }
@@ -421,34 +440,20 @@ function initSampleData(){
   var d2=new Date();d2.setDate(d2.getDate()-2);var d2s=dateStr(d2);
   state.tasks={
     history:[
-      {id:'t1',text:'背诵夏商周更替时间线',date:y,done:false,isSample:true},
-      {id:'t2',text:'复习秦统一六国的措施',date:t,done:false,isSample:true}
+      {id:'t1',text:'背诵夏商周更替时间线',answer:'夏（约前2070年）→ 商（约前1600年）→ 西周（前1046年）→ 东周（前770年）。夏桀暴政被商汤所灭，商纣暴政被周武王所灭。',date:y,done:false,isSample:true},
+      {id:'t2',text:'复习秦统一六国的措施',answer:'1.政治：建立中央集权制度，皇帝制度，三公九卿制；2.文化：统一文字为小篆；3.经济：统一货币（圆形方孔钱）、统一度量衡；4.交通：统一车轨、修驰道；5.军事：北击匈奴，修筑长城。',date:t,done:false,isSample:true}
     ],
     geography:[
-      {id:'t3',text:'记忆七大洲四大洋位置',date:t,done:true,doneAt:t+'T09:00',isSample:true}
+      {id:'t3',text:'记忆七大洲四大洋位置',answer:'七大洲（面积由大到小）：亚洲、非洲、北美洲、南美洲、南极洲、欧洲、大洋洲。四大洋（面积由大到小）：太平洋、大西洋、印度洋、北冰洋。',date:t,done:true,doneAt:t+'T09:00',isSample:true}
     ],
     biology:[
-      {id:'t4',text:'背诵植物细胞结构图',date:t,done:false,isSample:true}
+      {id:'t4',text:'背诵植物细胞结构图',answer:'植物细胞结构：1.细胞壁（最外层，保护和支持）；2.细胞膜（控制物质进出）；3.细胞质（进行生命活动）；4.细胞核（含遗传物质）；5.液泡（含细胞液）；6.叶绿体（光合作用场所）。动物细胞没有细胞壁、叶绿体和液泡。',date:t,done:false,isSample:true}
     ],
     politics:[
-      {id:'t5',text:'理解青春期的心理变化',date:t,done:false,isSample:true}
+      {id:'t5',text:'理解青春期的心理变化',answer:'青春期心理变化：1.独立意识增强，渴望独立；2.情绪波动大，容易冲动；3.自我意识增强，关注外貌和他人评价；4.性意识萌芽；5.逆反心理。应对方式：主动沟通、寻求帮助、学会自我调节。',date:t,done:false,isSample:true}
     ]
   };
   state.cards=JSON.parse(JSON.stringify(SAMPLE_CARDS));
-  state.points={
-    total:20,
-    log:[
-      {id:'p1',type:'task',desc:'完成任务: 记忆七大洲四大洋位置',amount:5,time:t+'T09:00'},
-      {id:'p2',type:'task',desc:'完成任务: 背诵丝绸之路知识点',amount:5,time:y+'T10:00'},
-      {id:'p3',type:'focus',desc:'专注25分钟',amount:10,time:y+'T10:30'}
-    ]
-  };
-  state.rewards=[
-    {id:'r1',name:'看动画片30分钟',cost:30,redeemed:false,isSample:true},
-    {id:'r2',name:'买零食一次',cost:20,redeemed:false,isSample:true},
-    {id:'r3',name:'周末多玩1小时游戏',cost:50,redeemed:false,isSample:true},
-    {id:'r4',name:'买一本喜欢的书',cost:80,redeemed:false,isSample:true}
-  ];
   state.checkin={
     dates:[d2s,y,t],
     studyTime:{}
@@ -501,7 +506,7 @@ function doCheckin(){
   if(isCheckedInToday())return;
   state.checkin.dates.push(t);
   save();
-  showToast('打卡成功！+2分，已连续'+getStreak()+'天');
+  showToast('打卡成功！已连续'+getStreak()+'天');
   render();
 }
 
@@ -579,7 +584,6 @@ function renderNav(){
 function renderTopbar(){}
 function switchView(v){
   currentView=v;
-  if(v==='tasks'){}
   render();
   window.scrollTo(0,0);
 }
@@ -592,26 +596,22 @@ function renderHome(){
   var h='';
   h+='<div class="page-header"><h1>首页概览</h1><p>今日学习进度与快速导航</p></div>';
 
-  // Checkin button
   if(isCheckedInToday()){
     h+='<button class="checkin-btn done">'+ic('check',20)+' 今日已打卡，连续 '+streak+' 天</button>';
   }else{
-    h+='<button class="checkin-btn" onclick="doCheckin()">'+ic('flame',20)+' 点击打卡（+2分）</button>';
+    h+='<button class="checkin-btn" onclick="doCheckin()">'+ic('flame',20)+' 点击打卡</button>';
   }
 
-  // Stat cards
   h+='<div class="stat-grid">';
   h+='<div class="stat-card teal"><div class="stat-icon">'+ic('target',20)+'</div><div class="stat-value">'+tp.done+'/'+tp.total+'</div><div class="stat-label">今日任务进度</div></div>';
   h+='<div class="stat-card amber"><div class="stat-icon">'+ic('flame',20)+'</div><div class="stat-value">'+streak+'</div><div class="stat-label">连续打卡天数</div></div>';
   h+='<div class="stat-card blue"><div class="stat-icon">'+ic('clock',20)+'</div><div class="stat-value">'+weeklyTime+'</div><div class="stat-label">本周学习时长(分钟)</div></div>';
   h+='</div>';
 
-  // Today progress bar
   h+='<div class="card"><div class="card-title">'+ic('target',18)+' 今日整体进度</div>';
   h+='<div class="progress-bar"><div class="progress-fill" style="width:'+tp.pct+'%"></div></div>';
   h+='<div class="progress-text">已完成 '+tp.done+' / '+tp.total+' 个任务（'+tp.pct+'%）</div></div>';
 
-  // Today section
   var overdue=getOverdueItems();
   h+='<div class="today-section"><h2>'+ic('clock',20)+' 今天要处理</h2>';
   if(overdue.length===0){
@@ -625,7 +625,6 @@ function renderHome(){
   }
   h+='</div>';
 
-  // Focus timer
   h+='<div class="card timer-card"><div class="card-title" style="justify-content:center">'+ic('clock',18)+' 专注计时器</div>';
   h+='<div class="timer-label">专注25分钟，记录学习时长</div>';
   h+='<div class="timer-display" id="timerDisplay">25:00</div>';
@@ -638,7 +637,6 @@ function renderHome(){
   h+='<button class="btn btn-outline btn-lg" onclick="resetFocus()">'+ic('reset',20)+' 重置</button>';
   h+='</div></div>';
 
-  // Subject progress
   h+='<div class="card"><div class="card-title">'+ic('tasks',18)+' 各科今日进度</div>';
   SUBJECTS.forEach(function(s){
     var todayTasks=state.tasks[s].filter(function(t){return t.date===todayStr()});
@@ -672,9 +670,8 @@ function switchSubject(s){
 /* ========== Tasks view ========== */
 function renderTasks(){
   var h='';
-  h+='<div class="page-header"><h1>四科任务区</h1><p>添加每日背诵任务，勾选完成自动计分</p></div>';
+  h+='<div class="page-header"><h1>四科任务区</h1><p>添加每日背诵任务，任务附带答案方便学习</p></div>';
 
-  // Sub tabs
   h+='<div class="sub-tabs">';
   SUBJECTS.forEach(function(s){
     var cls=s===currentSubject?'sub-tab active':'sub-tab';
@@ -682,15 +679,17 @@ function renderTasks(){
   });
   h+='</div>';
 
-  // Input row
+  /* Input form */
   h+='<div class="card">';
   h+='<div class="task-input-row">';
-  h+='<input type="text" id="taskInput" placeholder="输入背诵任务，如：背诵第3课知识点" onkeydown="if(event.keyCode===13)addTask()">';
+  h+='<input type="text" id="taskInput" placeholder="输入背诵任务，如：背诵第3课知识点" onkeydown="if(event.keyCode===13)document.getElementById(\'taskAnswerInput\').focus()">';
   h+='<input type="date" id="taskDate" value="'+todayStr()+'">';
   h+='<button class="btn btn-primary" onclick="addTask()">'+ic('plus',18)+' 添加</button>';
-  h+='</div></div>';
+  h+='</div>';
+  h+='<textarea class="task-answer-input" id="taskAnswerInput" placeholder="输入答案/知识点（选填，方便复习时查看）"></textarea>';
+  h+='</div>';
 
-  // Progress
+  /* Progress */
   var tasks=state.tasks[currentSubject];
   var todayTasks=tasks.filter(function(t){return t.date===todayStr()});
   var doneTasks=todayTasks.filter(function(t){return t.done});
@@ -699,8 +698,8 @@ function renderTasks(){
   h+='<div class="progress-bar"><div class="progress-fill" style="width:'+pct+'%;background:'+SUBJECT_COLORS[currentSubject]+'"></div></div>';
   h+='<div class="progress-text">已完成 '+doneTasks.length+' / '+todayTasks.length+'（'+pct+'%）</div></div>';
 
-  // Task list
-  h+='<div class="card"><div class="card-title">任务列表</div>';
+  /* Task list */
+  h+='<div class="card"><div class="card-title">'+ic('tasks',18)+' 任务列表（含答案）</div>';
   var sortedTasks=tasks.slice().sort(function(a,b){
     if(a.done!==b.done)return a.done?1:-1;
     return (a.date||'').localeCompare(b.date||'');
@@ -710,10 +709,18 @@ function renderTasks(){
   }else{
     sortedTasks.forEach(function(t){
       h+='<div class="task-item'+(t.done?' done':'')+'">';
+      h+='<div class="task-item-header">';
       h+='<div class="task-checkbox'+(t.done?' checked':'')+'" onclick="toggleTask(\''+currentSubject+'\',\''+t.id+'\')">'+(t.done?ic('check',16):'')+'</div>';
       h+='<div class="task-text">'+t.text+(t.wasOverdue?' <small style="color:#ef4444">(逾期)</small>':'')+'</div>';
       h+='<div class="task-date">'+(t.date||'')+'</div>';
       h+='<button class="task-delete" onclick="deleteTask(\''+currentSubject+'\',\''+t.id+'\')">'+ic('trash',16)+'</button>';
+      h+='</div>';
+      if(t.answer){
+        h+='<div class="task-answer-box">';
+        h+='<div class="task-answer-label">'+ic('book',14)+' 知识点 / 答案</div>';
+        h+=t.answer;
+        h+='</div>';
+      }
       h+='</div>';
     });
   }
@@ -725,11 +732,13 @@ function switchSub(s){currentSubject=s;render()}
 function addTask(){
   var input=document.getElementById('taskInput');
   var dateInput=document.getElementById('taskDate');
+  var answerInput=document.getElementById('taskAnswerInput');
   var text=input.value.trim();
   if(!text){return}
-  state.tasks[currentSubject].push({id:'t'+Date.now(),text:text,date:dateInput.value||todayStr(),done:false});
+  state.tasks[currentSubject].push({id:'t'+Date.now(),text:text,answer:answerInput.value.trim(),date:dateInput.value||todayStr(),done:false});
   save();
   input.value='';
+  answerInput.value='';
   render();
 }
 function toggleTask(subject,id){
@@ -759,9 +768,9 @@ function getFilteredCards(){
 }
 function renderCards(){
   var h='';
-  h+='<div class="page-header"><h1>知识卡片库</h1><p>翻卡片自测 + 选择题练习</p></div>';
+  h+='<div class="page-header"><h1>知识卡片库</h1><p>选择题与填空题混合练习</p></div>';
 
-  // Filter
+  /* Filter */
   h+='<div class="card-filter">';
   var filters=[{v:'all',l:'全部'},{v:'history',l:'历史'},{v:'geography',l:'地理'},{v:'biology',l:'生物'},{v:'politics',l:'政治'}];
   filters.forEach(function(f){
@@ -776,15 +785,21 @@ function renderCards(){
   }else{
     if(cardIndex>=cards.length)cardIndex=0;
     var card=cards[cardIndex];
+    var cardType=card.type||'choice';
     h+='<div class="review-card">';
     h+='<div class="review-card-front">';
     h+='<div class="rc-subject"><span class="subject-tag '+SUBJECT_TAGS[card.subject]+'">'+SUBJECT_NAMES[card.subject]+'</span>';
+    if(cardType==='choice'){
+      h+='<span class="rc-type-tag choice">选择题</span>';
+    }else{
+      h+='<span class="rc-type-tag fill">填空题</span>';
+    }
     if(card.mastered)h+=' <span style="color:#22c55e;font-size:12px;font-weight:600">已掌握</span>';
     h+='</div>';
     h+='<div class="rc-question">'+card.front+'</div>';
 
-    if(card.options && card.options.length>0){
-      // Quiz mode
+    if(cardType==='choice' && card.options && card.options.length>0){
+      /* Choice mode */
       h+='<div class="rc-options">';
       var letters=['A','B','C','D'];
       card.options.forEach(function(opt,i){
@@ -799,10 +814,24 @@ function renderCards(){
       });
       h+='</div>';
       if(cardAnswered){
-        h+='<div class="rc-explain"><div class="rc-answer-tag">'+(cardSelectedOption===card.answerIndex?'回答正确':'回答错误，正确答案: '+letters[card.answerIndex])+'</div>'+card.back+'</div>';
+        var isCorrect=cardSelectedOption===card.answerIndex;
+        h+='<div class="rc-explain"><div class="rc-answer-tag '+(isCorrect?'correct-tag':'wrong-tag')+'">'+(isCorrect?'回答正确':'回答错误，正确答案: '+letters[card.answerIndex])+'</div>'+card.back+'</div>';
       }
+    }else if(cardType==='fill'){
+      /* Fill-in-the-blank mode */
+      h+='<div class="rc-fill-area">';
+      if(!cardAnswered){
+        h+='<input type="text" class="rc-fill-input" id="fillInput" placeholder="在此输入答案..." value="'+escapeHtml(cardFillInput)+'" onkeydown="if(event.keyCode===13)checkFill()" autocomplete="off">';
+        h+='<button class="btn btn-primary btn-lg" style="width:100%;margin-top:10px" onclick="checkFill()">'+ic('check',20)+' 提交答案</button>';
+      }else{
+        var fillCorrect=checkFillAnswer(card,cardFillInput);
+        var inputCls=fillCorrect?'rc-fill-input correct':'rc-fill-input wrong';
+        h+='<input type="text" class="'+inputCls+'" value="'+escapeHtml(cardFillInput)+'" disabled>';
+        h+='<div class="rc-explain"><div class="rc-answer-tag '+(fillCorrect?'correct-tag':'wrong-tag')+'">'+(fillCorrect?'回答正确':'正确答案: '+card.fillAnswer)+'</div>'+card.back+'</div>';
+      }
+      h+='</div>';
     }else{
-      // Flip card mode
+      /* Flip card mode (custom cards without type) */
       if(cardFlipped){
         h+='<div class="rc-explain" style="background:var(--teal-50);font-size:16px;padding:18px">'+card.back+'</div>';
         h+='<button class="rc-flip-btn" onclick="flipCard()" style="margin-top:10px">翻回正面</button>';
@@ -812,7 +841,7 @@ function renderCards(){
     }
     h+='</div>';
 
-    // Nav
+    /* Nav */
     h+='<div class="rc-nav" style="padding:12px 24px">';
     h+='<button class="btn btn-outline btn-sm" onclick="prevCard()" '+(cardIndex===0?'disabled':'')+'>'+ic('left',16)+'</button>';
     h+='<span class="rc-nav-info">'+(cardIndex+1)+' / '+cards.length+'</span>';
@@ -826,7 +855,7 @@ function renderCards(){
     h+='</div>';
   }
 
-  // Add card form
+  /* Add card form */
   h+='<div class="card">';
   if(showAddCardForm){
     h+='<div class="card-title">'+ic('plus',18)+' 添加自定义卡片</div>';
@@ -835,8 +864,16 @@ function renderCards(){
     h+='<select id="newCardSubject">';
     SUBJECTS.forEach(function(s){h+='<option value="'+s+'"'+(s===currentSubject?' selected':'')+'>'+SUBJECT_NAMES[s]+'</option>'});
     h+='</select></div>';
-    h+='<div class="form-row"><label>正面（问题/知识点）</label><textarea id="newCardFront" placeholder="如：秦始皇统一的措施有哪些？"></textarea></div>';
-    h+='<div class="form-row"><label>背面（答案/解析）</label><textarea id="newCardBack" placeholder="如：统一文字、货币、度量衡..."></textarea></div>';
+    h+='<div class="form-row"><label>题型</label>';
+    h+='<select id="newCardType" onchange="toggleCardTypeFields()">';
+    h+='<option value="choice">选择题</option>';
+    h+='<option value="fill">填空题</option>';
+    h+='<option value="flip">翻卡片（问答）</option>';
+    h+='</select></div>';
+    h+='<div class="form-row"><label>题目（填空题用 ____ 表示空格）</label><textarea id="newCardFront" placeholder="如：秦朝统一六国的时间是____"></textarea></div>';
+    h+='<div class="form-row" id="fillAnswerRow" style="display:none"><label>填空答案</label><input type="text" id="newCardFillAnswer" placeholder="如：公元前221年"></div>';
+    h+='<div class="form-row" id="optionsRow"><label>选项（每行一个，第一个为正确答案）</label><textarea id="newCardOptions" placeholder="选项A&#10;选项B&#10;选项C&#10;选项D" style="min-height:100px"></textarea></div>';
+    h+='<div class="form-row"><label>答案解析</label><textarea id="newCardBack" placeholder="如：公元前221年，秦始皇嬴政统一六国"></textarea></div>';
     h+='<div style="display:flex;gap:8px">';
     h+='<button class="btn btn-outline" onclick="showAddCardForm=false;render()">取消</button>';
     h+='<button class="btn btn-primary" onclick="addCustomCard()">保存卡片</button>';
@@ -848,7 +885,16 @@ function renderCards(){
 
   return h;
 }
-function setCardFilter(f){cardFilter=f;cardIndex=0;cardAnswered=false;cardFlipped=false;render()}
+function escapeHtml(s){
+  if(!s)return '';
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function toggleCardTypeFields(){
+  var type=document.getElementById('newCardType').value;
+  document.getElementById('fillAnswerRow').style.display=type==='fill'?'block':'none';
+  document.getElementById('optionsRow').style.display=type==='choice'?'block':'none';
+}
+function setCardFilter(f){cardFilter=f;cardIndex=0;cardAnswered=false;cardFlipped=false;cardFillInput='';render()}
 function answerCard(i){
   var cards=getFilteredCards();
   if(cardIndex>=cards.length)return;
@@ -856,10 +902,25 @@ function answerCard(i){
   cardSelectedOption=i;
   cardAnswered=true;
   card.reviewCount=(card.reviewCount||0)+1;
-  if(i===card.answerIndex && !card.mastered){
-  }
   save();
   render();
+}
+function checkFill(){
+  var cards=getFilteredCards();
+  if(cardIndex>=cards.length)return;
+  var card=cards[cardIndex];
+  var input=document.getElementById('fillInput');
+  cardFillInput=input.value.trim();
+  cardAnswered=true;
+  card.reviewCount=(card.reviewCount||0)+1;
+  save();
+  render();
+}
+function checkFillAnswer(card,input){
+  if(!card.fillAnswer||!input)return false;
+  var ans=card.fillAnswer.trim().toLowerCase();
+  var inp=input.trim().toLowerCase();
+  return ans===inp;
 }
 function flipCard(){
   cardFlipped=!cardFlipped;
@@ -874,10 +935,10 @@ function flipCard(){
 }
 function nextCard(){
   var cards=getFilteredCards();
-  if(cardIndex<cards.length-1){cardIndex++;cardAnswered=false;cardSelectedOption=-1;cardFlipped=false;render()}
+  if(cardIndex<cards.length-1){cardIndex++;cardAnswered=false;cardSelectedOption=-1;cardFlipped=false;cardFillInput='';render()}
 }
 function prevCard(){
-  if(cardIndex>0){cardIndex--;cardAnswered=false;cardSelectedOption=-1;cardFlipped=false;render()}
+  if(cardIndex>0){cardIndex--;cardAnswered=false;cardSelectedOption=-1;cardFlipped=false;cardFillInput='';render()}
 }
 function markMastered(){
   var cards=getFilteredCards();
@@ -889,30 +950,42 @@ function markMastered(){
   }
 }
 function shuffleCards(){
-  // Fisher-Yates shuffle
   for(var i=state.cards.length-1;i>0;i--){
     var j=Math.floor(Math.random()*(i+1));
     var temp=state.cards[i];state.cards[i]=state.cards[j];state.cards[j]=temp;
   }
-  cardIndex=0;cardAnswered=false;cardSelectedOption=-1;cardFlipped=false;
+  cardIndex=0;cardAnswered=false;cardSelectedOption=-1;cardFlipped=false;cardFillInput='';
   save();
   render();
 }
 function addCustomCard(){
   var s=document.getElementById('newCardSubject').value;
+  var type=document.getElementById('newCardType').value;
   var f=document.getElementById('newCardFront').value.trim();
   var b=document.getElementById('newCardBack').value.trim();
-  if(!f||!b){alert('请填写正面和背面内容');return}
-  state.cards.push({id:'c'+Date.now(),subject:s,front:f,back:b,options:null,answerIndex:-1,mastered:false,reviewCount:0});
+  if(!f){alert('请填写题目');return}
+  var card={id:'c'+Date.now(),subject:s,type:type,front:f,back:b,mastered:false,reviewCount:0};
+  if(type==='choice'){
+    var optsText=document.getElementById('newCardOptions').value.trim();
+    if(!optsText){alert('请填写选项');return}
+    var opts=optsText.split('\n').filter(function(l){return l.trim()});
+    if(opts.length<2){alert('至少需要2个选项');return}
+    card.options=opts;
+    card.answerIndex=0;
+  }else if(type==='fill'){
+    var fa=document.getElementById('newCardFillAnswer').value.trim();
+    if(!fa){alert('请填写填空答案');return}
+    card.fillAnswer=fa;
+  }
+  state.cards.push(card);
   save();
   showAddCardForm=false;
   cardFilter=s;
   cardIndex=state.cards.filter(function(c){return c.subject===s}).length-1;
-  cardAnswered=false;cardFlipped=false;
+  cardAnswered=false;cardFlipped=false;cardFillInput='';
   render();
   showToast('卡片已添加');
 }
-
 
 /* ========== Focus timer ========== */
 function startFocus(){
@@ -967,7 +1040,6 @@ function renderWeekly(){
   var h='';
   h+='<div class="page-header"><h1>周复盘</h1><p>查看本周学习情况和任务完成率</p></div>';
 
-  // Summary stats
   var last7=getLast7Days();
   var totalTasks=0,totalStudy=0;
   last7.forEach(function(d){
@@ -981,7 +1053,6 @@ function renderWeekly(){
   h+='<div class="stat-card amber"><div class="stat-icon">'+ic('cards',20)+'</div><div class="stat-value">'+masteredCount+'/'+state.cards.length+'</div><div class="stat-label">已掌握卡片</div></div>';
   h+='</div>';
 
-  // Calendar week
   h+='<div class="chart-container"><h3>本周日历</h3>';
   h+='<div class="calendar-week">';
   last7.forEach(function(d){
@@ -995,21 +1066,18 @@ function renderWeekly(){
   });
   h+='</div></div>';
 
-  // Bar chart - tasks completed per day
   h+='<div class="chart-container"><h3>每日任务完成量</h3>';
   h+=drawBarChart(last7,function(d){
     return getTaskCountForDate(d);
   },'#14b8a6');
   h+='</div>';
 
-  // Bar chart - study time per day
   h+='<div class="chart-container"><h3>每日学习时长（分钟）</h3>';
   h+=drawBarChart(last7,function(d){
     return state.checkin.studyTime[d]||0;
   },'#3b82f6');
   h+='</div>';
 
-  // Subject breakdown
   h+='<div class="chart-container"><h3>各科任务完成统计</h3>';
   SUBJECTS.forEach(function(s){
     var todayTasks=state.tasks[s].filter(function(t){return t.date===todayStr()});
@@ -1047,7 +1115,7 @@ function drawBarChart(days,valueFn,color){
 
 /* ========== Export/Import/Clear ========== */
 function exportData(){
-  var data={state:state,exportDate:new Date().toISOString(),version:2};
+  var data={state:state,exportDate:new Date().toISOString(),version:3};
   var blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
   var url=URL.createObjectURL(blob);
   var a=document.createElement('a');
@@ -1074,14 +1142,13 @@ function importData(file){
 }
 function showClearModal(){
   var overlay=document.getElementById('modalOverlay');
-  overlay.innerHTML='<div class="modal"><h3>清空所有数据</h3><p>将清空所有任务、卡片、积分和打卡记录，此操作不可撤销。建议先导出备份。</p><div style="margin:12px 0"><button class="btn btn-outline" style="width:100%;margin-bottom:8px" onclick="clearSampleOnly()">仅清空示例数据</button></div><div class="modal-btns"><button class="btn btn-outline" onclick="closeModal()">取消</button><button class="btn btn-danger" onclick="clearAll()">确认清空</button></div></div>';
+  overlay.innerHTML='<div class="modal"><h3>清空所有数据</h3><p>将清空所有任务、卡片和打卡记录，此操作不可撤销。建议先导出备份。</p><div style="margin:12px 0"><button class="btn btn-outline" style="width:100%;margin-bottom:8px" onclick="clearSampleOnly()">仅清空示例数据</button></div><div class="modal-btns"><button class="btn btn-outline" onclick="closeModal()">取消</button><button class="btn btn-danger" onclick="clearAll()">确认清空</button></div></div>';
   overlay.className='modal-overlay show';
 }
 function closeModal(){document.getElementById('modalOverlay').className='modal-overlay';document.getElementById('modalOverlay').innerHTML=''}
 function clearSampleOnly(){
   SUBJECTS.forEach(function(s){state.tasks[s]=state.tasks[s].filter(function(t){return !t.isSample})});
   state.cards=state.cards.filter(function(c){return !c.isSample});
-  state.rewards=state.rewards.filter(function(r){return !r.isSample});
   save();
   closeModal();
   render();
@@ -1089,7 +1156,7 @@ function clearSampleOnly(){
 }
 function clearAll(){
   localStorage.removeItem(STORE_KEY+'state');
-  state={tasks:{history:[],geography:[],biology:[],politics:[]},cards:[],points:{total:0,log:[]},rewards:[],checkin:{dates:[],studyTime:{}}};
+  state={tasks:{history:[],geography:[],biology:[],politics:[]},cards:[],checkin:{dates:[],studyTime:{}}};
   closeModal();
   render();
   showToast('所有数据已清空');
