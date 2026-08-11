@@ -413,7 +413,7 @@ var state={
 };
 var currentView='home';
 var currentSubject='history';
-var cardFilter='all';
+var cardFilter='unmastered';
 var cardIndex=0;
 var cardAnswered=false;
 var cardSelectedOption=-1;
@@ -564,6 +564,9 @@ function generateDailyQuestions(){
     var cardId='dcard_'+state.currentDay+'_'+i;
     var cardExists=state.cards.some(function(c){return c.id===cardId});
     if(!cardExists){
+      // 内容去重：同一科目、相同题干的卡片不重复添加（避免章节 12 天轮转时同一题被加成多张卡，导致复习列表无限增长）
+      var dupContent=state.cards.some(function(c){return c.subject===q.subject && c.front===q.front});
+      if(!dupContent){
       var card={
         id:cardId,
         subject:q.subject,
@@ -582,6 +585,7 @@ function generateDailyQuestions(){
         card.fillAnswer=q.fillAnswer;
       }
       state.cards.push(card);
+      }
     }
   });
   state.lastActiveDate=t;
@@ -929,17 +933,30 @@ function deleteTask(subject,id){
 
 /* ========== Cards view ========== */
 function getFilteredCards(){
+  if(cardFilter==='unmastered')return state.cards.filter(function(c){return !c.mastered});
+  if(cardFilter==='mastered')return state.cards.filter(function(c){return c.mastered});
   if(cardFilter==='all')return state.cards;
   return state.cards.filter(function(c){return c.subject===cardFilter});
 }
 function renderCards(){
   var h='';
-  h+='<div class="page-header"><h1>知识卡片库</h1><p>选择题与填空题混合练习</p></div>';
+  h+='<div class="page-header"><h1>知识卡片库</h1><p>答对自动移出「未掌握」· 选择题与填空题混合练习</p></div>';
 
-  /* Filter */
+  /* Filter: 掌握状态 */
+  var unmasteredCount=state.cards.filter(function(c){return !c.mastered}).length;
+  var masteredCount=state.cards.filter(function(c){return c.mastered}).length;
   h+='<div class="card-filter">';
-  var filters=[{v:'all',l:'全部'},{v:'history',l:'历史'},{v:'geography',l:'地理'},{v:'biology',l:'生物'},{v:'politics',l:'政治'}];
-  filters.forEach(function(f){
+  var mfilters=[{v:'unmastered',l:'未掌握 ('+unmasteredCount+')'},{v:'all',l:'全部 ('+state.cards.length+')'},{v:'mastered',l:'已掌握 ('+masteredCount+')'}];
+  mfilters.forEach(function(f){
+    var cls=f.v===cardFilter?'filter-btn active':'filter-btn';
+    h+='<button class="'+cls+'" onclick="setCardFilter(\''+f.v+'\')">'+f.l+'</button>';
+  });
+  h+='</div>';
+
+  /* Filter: 科目 */
+  h+='<div class="card-filter">';
+  var sfilters=[{v:'history',l:'历史'},{v:'geography',l:'地理'},{v:'biology',l:'生物'},{v:'politics',l:'政治'}];
+  sfilters.forEach(function(f){
     var cls=f.v===cardFilter?'filter-btn active':'filter-btn';
     h+='<button class="'+cls+'" onclick="setCardFilter(\''+f.v+'\')">'+f.l+'</button>';
   });
@@ -947,7 +964,8 @@ function renderCards(){
 
   var cards=getFilteredCards();
   if(cards.length===0){
-    h+='<div class="card"><div class="empty-state">'+ic('cards',32)+'<p>暂无卡片，点击下方添加</p></div></div>';
+    var emptyMsg=cardFilter==='unmastered'?'太棒了！未掌握卡片已全部清空，复习列表不再增长。':'暂无卡片，点击下方添加或切换筛选。';
+    h+='<div class="card"><div class="empty-state">'+ic('cards',32)+'<p>'+emptyMsg+'</p></div></div>';
   }else{
     if(cardIndex>=cards.length)cardIndex=0;
     var card=cards[cardIndex];
@@ -1014,6 +1032,8 @@ function renderCards(){
     h+='<div style="display:flex;gap:6px">';
     if(!card.mastered){
       h+='<button class="btn btn-green btn-sm" onclick="markMastered()">'+ic('check',16)+' 掌握</button>';
+    }else{
+      h+='<button class="btn btn-outline btn-sm" onclick="unmarkMastered()">'+ic('check',16)+' 取消掌握</button>';
     }
     h+='<button class="btn btn-outline btn-sm" onclick="shuffleCards()">'+ic('shuffle',16)+'</button>';
     h+='<button class="btn btn-primary btn-sm" onclick="nextCard()">'+ic('right',16)+'</button>';
@@ -1068,6 +1088,11 @@ function answerCard(i){
   cardSelectedOption=i;
   cardAnswered=true;
   card.reviewCount=(card.reviewCount||0)+1;
+  if(i===card.answerIndex){
+    card.mastered=true;
+    cardAnswered=false;cardSelectedOption=-1;cardFlipped=false;cardFillInput='';
+    showToast('答对啦，已掌握 ✓ 移出复习列表');
+  }
   save();
   render();
 }
@@ -1079,6 +1104,11 @@ function checkFill(){
   cardFillInput=input.value.trim();
   cardAnswered=true;
   card.reviewCount=(card.reviewCount||0)+1;
+  if(checkFillAnswer(card,cardFillInput)){
+    card.mastered=true;
+    cardAnswered=false;cardSelectedOption=-1;cardFlipped=false;cardFillInput='';
+    showToast('答对啦，已掌握 ✓ 移出复习列表');
+  }
   save();
   render();
 }
@@ -1111,7 +1141,16 @@ function markMastered(){
   if(cardIndex<cards.length){
     cards[cardIndex].mastered=true;
     save();
-    showToast('标记掌握！');
+    showToast('标记掌握！已移出未掌握复习');
+    render();
+  }
+}
+function unmarkMastered(){
+  var cards=getFilteredCards();
+  if(cardIndex<cards.length){
+    cards[cardIndex].mastered=false;
+    save();
+    showToast('已取消掌握，重新进入复习');
     render();
   }
 }
